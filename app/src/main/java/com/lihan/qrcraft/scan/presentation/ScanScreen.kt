@@ -3,7 +3,9 @@
 package com.lihan.qrcraft.scan.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +25,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +41,7 @@ import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.presentation.util.openAppSettings
 import com.lihan.qrcraft.scan.presentation.components.CameraPermissionDialog
 import com.lihan.qrcraft.scan.presentation.components.ScanFrame
+import com.lihan.qrcraft.scan.presentation.components.ScanningView
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
@@ -63,12 +68,17 @@ fun ScanScreenRoot(
 }
 
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun ScanScreen(
     state: ScanState,
     onAction: (ScanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val boxWidth = (configuration.screenWidthDp * 0.7).dp
+    val boxHeight = (configuration.screenHeightDp * 0.7).dp
+
     val context = LocalContext.current
     val permissionState = rememberPermissionState(
         permission = Manifest.permission.CAMERA,
@@ -104,10 +114,25 @@ fun ScanScreen(
                 style = MaterialTheme.typography.titleSmall,
                 color = OnOverlay
             )
-            ScanFrame(
-                modifier = Modifier
-                    .size(320.dp)
+            if (status.isGranted){
+                ScanningView(
+                    modifier = Modifier
+                        .size(
+                            width = boxWidth,
+                            height = boxHeight
+                        )
                 )
+            }else{
+                Image(
+                    modifier = Modifier
+                        .size(
+                            width = boxWidth,
+                            height = boxHeight
+                        ),
+                    painter = painterResource(R.drawable.qrcode_preview),
+                    contentDescription = null
+                )
+            }
         }
     }
 
