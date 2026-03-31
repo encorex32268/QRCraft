@@ -1,12 +1,17 @@
 package com.lihan.qrcraft.scan.presentation.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -27,8 +32,12 @@ fun ScanFrame(
     val borderStrokeWidth = 4.dp
     val borderStrokeWidthPx = with(density) { borderStrokeWidth.toPx() }
     val length = with(density){ 50.dp.toPx() }
+
+
     Canvas(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = Color.Transparent)
     ) {
         drawQRCodeFrame(
             length = length,
@@ -104,6 +113,16 @@ fun DrawScope.drawQRCodeFrame(
         )
         lineTo(x = 0f, y = size.height - length)
     }
+
+
+    drawRect(
+        color = Color.Transparent,
+        size = Size(
+            width = size.width,
+            height =size.height
+        ),
+        blendMode = BlendMode.Clear
+    )
 
     drawPath(
         path = path,

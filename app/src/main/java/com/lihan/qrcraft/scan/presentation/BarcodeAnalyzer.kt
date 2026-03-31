@@ -18,9 +18,7 @@ import kotlin.math.roundToInt
 class BarcodeAnalyzer(
     private val onSuccess: (List<Barcode>) -> Unit,
     private val onFailed: (Exception) -> Unit,
-    private val onIdle: () -> Unit = {},
     private val scanDelayMillis: Long = 1000L,
-    private val idleTimeoutMillis: Long = 2000L
 ): ImageAnalysis.Analyzer {
 
     private val options = BarcodeScannerOptions
@@ -31,14 +29,19 @@ class BarcodeAnalyzer(
     private val scanner = BarcodeScanning.getClient(options)
     private var isScanningAllowed = true
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private var idleJob: Job? = null
+
 
     @ExperimentalGetImage
     override fun analyze(imageProxy: ImageProxy) {
-        if (!isScanningAllowed){
+
+        val mediaImage = imageProxy.image
+
+        if (mediaImage == null || !isScanningAllowed){
             imageProxy.close()
             return
         }
+
+
         imageProxy.image?.let {  image ->
             scanner.process(
                 InputImage.fromMediaImage(
@@ -74,13 +77,8 @@ class BarcodeAnalyzer(
 
                     if (filtered.isNotEmpty()){
                         onSuccess(barcodes)
-                        idleJob?.cancel()
-                        idleJob = coroutineScope.launch {
-                            delay(idleTimeoutMillis)
-                            onIdle()
-                        }
+                        isScanningAllowed = false
                     }
-
                     coroutineScope.launch {
                         delay(scanDelayMillis)
                         isScanningAllowed = true

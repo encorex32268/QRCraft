@@ -1,0 +1,33 @@
+package com.lihan.qrcraft.core.domain
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.lihan.qrcraft.R
+
+enum class QRCodeType(val type: Int){
+    Text(Barcode.TYPE_TEXT),
+    Link(Barcode.TYPE_URL),
+    Contact(Barcode.TYPE_CONTACT_INFO),
+    PhoneNumber(Barcode.TYPE_PHONE),
+    Geolocation(Barcode.TYPE_GEO),
+    WiFi(Barcode.TYPE_WIFI);
+
+    companion object{
+        fun getQRCodeType(type: Int): QRCodeType {
+            return QRCodeType.entries.find { it.type == type }?: Text
+        }
+
+        @Composable
+        fun QRCodeType.asString(): String{
+            return when(this){
+                Text -> stringResource(R.string.text)
+                Link -> stringResource(R.string.link)
+                Contact -> stringResource(R.string.contact)
+                PhoneNumber -> stringResource(R.string.phone_nubmer)
+                Geolocation -> stringResource(R.string.geo_location)
+                WiFi -> stringResource(R.string.wifi)
+            }
+        }
+    }
+}

@@ -1,40 +1,44 @@
 package com.lihan.qrcraft.scan.presentation.components
 
-import android.util.Rational
 import android.view.Surface
-import android.view.Surface.ROTATION_0
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.UseCaseGroup
-import androidx.camera.core.ViewPort
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.lihan.qrcraft.scan.presentation.BarcodeAnalyzer
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import androidx.compose.ui.platform.LocalInspectionMode
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.lihan.qrcraft.R
+import com.lihan.qrcraft.scan.presentation.BarcodeAnalyzer
+import com.lihan.qrcraft.ui.theme.OnOverlay
+import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.ui.theme.QRCraftTheme
 
 @Composable
 fun ScanningView(
+    onSuccess: (List<Barcode>) -> Unit,
+    onFailed: (Exception) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -54,36 +58,8 @@ fun ScanningView(
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     BarcodeAnalyzer(
-                        onSuccess = { barcodes ->
-                            val barcode = barcodes.firstOrNull() ?: return@BarcodeAnalyzer
-                            when(val type = barcode.valueType){
-                                Barcode.TYPE_URL -> {
-                                    val url = barcode.url?.url
-                                    println("這是一個網址: $url")
-                                }
-                                Barcode.TYPE_WIFI -> {
-                                    val ssid = barcode.wifi?.ssid
-                                    println("這是一個 WiFi 資訊，SSID 為: $ssid")
-                                }
-                                Barcode.TYPE_TEXT -> {
-                                    val text = barcode.rawValue
-                                    println("這是純文字: $text")
-                                }
-                                Barcode.TYPE_CONTACT_INFO -> {
-                                    val name = barcode.contactInfo?.name?.formattedName
-                                    println("這是一個聯絡人: $name")
-                                }
-                                else -> {
-                                    println("其他類型或無法辨識的格式，Type Code: $type")
-                                }
-                            }
-                        },
-                        onFailed = {
-                           it.printStackTrace()
-                        },
-                        onIdle = {
-                            println("Idle")
-                        }
+                        onSuccess = onSuccess,
+                        onFailed = onFailed
                     )
                 )
             }
@@ -94,8 +70,7 @@ fun ScanningView(
             contentAlignment = Alignment.Center
         ){
             AndroidView(
-                modifier = Modifier
-                    .size(320.dp),
+                modifier = Modifier.fillMaxSize(),
                 factory = { context ->
                     val previewView = PreviewView(context).apply {
                         scaleType = PreviewView.ScaleType.FILL_CENTER
@@ -116,14 +91,30 @@ fun ScanningView(
                         )
                     }.onFailure {
                         it.printStackTrace()
-                        println("AndroidView Error")
                     }
                     previewView
                 }
             )
-            ScanFrame(
-                modifier = Modifier.size(320.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = OnSurfaceAlt.copy(alpha = 0.5f))
             )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.point_your_camera_at_a_qr_code),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = OnOverlay
+                )
+                Spacer(Modifier.height(32.dp))
+                ScanFrame(
+                    modifier = Modifier.size(320.dp)
+                )
+            }
         }
     } else {
         // Provide a placeholder in inspection mode to avoid CameraX errors
@@ -143,6 +134,9 @@ fun ScanningView(
 @Composable
 private fun ScanningViewPreview() {
     QRCraftTheme {
-        ScanningView()
+        ScanningView(
+            onFailed = {},
+            onSuccess = {}
+        )
     }
 }
