@@ -17,17 +17,5 @@ enum class QRCodeType(val type: Int){
         fun getQRCodeType(type: Int?): QRCodeType {
             return QRCodeType.entries.find { it.type == type }?: Text
         }
-
-        @Composable
-        fun QRCodeType.asString(): String{
-            return when(this){
-                Text -> stringResource(R.string.text)
-                Link -> stringResource(R.string.link)
-                Contact -> stringResource(R.string.contact)
-                PhoneNumber -> stringResource(R.string.phone_nubmer)
-                Geolocation -> stringResource(R.string.geo_location)
-                WiFi -> stringResource(R.string.wifi)
-            }
-        }
     }
 }

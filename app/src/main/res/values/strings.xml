@@ -12,9 +12,18 @@
     <string name="text">Text</string>
     <string name="link">Link</string>
     <string name="contact">Contact</string>
-    <string name="phone_nubmer">Phone Number</string>
+    <string name="phone_number">Phone Number</string>
     <string name="geo_location">Geolocation</string>
     <string name="wifi">Wi-Fi</string>
     <string name="scan_result">Scan Result</string>
     <string name="camera_permission_granted">Camera permission granted</string>
+    <string name="create_qr">Create QR</string>
+    <string name="generate_qr_code">Generate QR-Code</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="ssid">SSID</string>
+    <string name="password">Password</string>
+    <string name="encryption_type">Encryption Type</string>
 </resources>

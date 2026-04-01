@@ -20,11 +20,6 @@ sealed interface Route {
     @Serializable
     data object Generate: Route
 
-    companion object{
-        fun showBottomBarRoute(): List<Route>{
-            return listOf(
-                Scan, History, Generate
-            )
-        }
-    }
+    @Serializable
+    data class Create(val type: Int): Route
 }

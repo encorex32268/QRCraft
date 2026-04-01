@@ -37,12 +37,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
-import com.lihan.qrcraft.core.domain.QRCodeType.Companion.asString
 import com.lihan.qrcraft.core.presentation.components.TextLinkButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
+import com.lihan.qrcraft.core.presentation.util.asString
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.Surface
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
 
 @Composable

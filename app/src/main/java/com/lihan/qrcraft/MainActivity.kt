@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,17 +29,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.lihan.qrcraft.core.presentation.components.BottomNavigation
 import com.lihan.qrcraft.core.domain.Route
+import com.lihan.qrcraft.generate.presentation.GenerateScreen
+import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
 import com.lihan.qrcraft.scan.presentation.result.ScanResultScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,18 +56,20 @@ class MainActivity : ComponentActivity() {
             QRCraftTheme {
                 val navController = rememberNavController()
 
+                val startDestination = Route.Generate
 
-                var selectedRoute by remember {
-                    mutableStateOf<Route>(Route.Scan)
+                var selectedRoute by remember{
+                    mutableStateOf<Route>(startDestination)
                 }
 
+                val currentRoute by navController
+                    .currentBackStackEntryAsState()
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    contentWindowInsets = WindowInsets(0),
                     containerColor = Color.Transparent,
                     bottomBar = {
-                        if (selectedRoute in Route.showBottomBarRoute()){
+                        if (currentRoute?.destination.isMainRoute()){
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -85,9 +94,9 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {  it
                     NavHost(
-                        modifier =Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         navController = navController,
-                        startDestination = Route.Scan
+                        startDestination = startDestination
                     ){
                         composable<Route.Scan>{
                             ScanScreenRoot(
@@ -122,14 +131,21 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable<Route.Generate>{
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ){
-                                Text(
-                                    text = "Generate"
-                                )
-                            }
+                            GenerateScreen(
+                                onItemClick = { qrCodeTypeUi ->
+                                    navController.navigate(
+                                        Route.Create(qrCodeTypeUi.type)
+                                    )
+                                }
+                            )
+                        }
+
+                        composable<Route.Create>{
+                            CreateScreenRoot(
+                                onBack = {
+                                    navController.navigateUp()
+                                }
+                            )
                         }
                     }
 
@@ -139,4 +155,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun NavDestination?.isMainRoute(): Boolean {
+    this ?: return false
+    return hasRoute<Route.Scan>() ||
+            hasRoute<Route.History>() ||
+            hasRoute<Route.Generate>()
 }
