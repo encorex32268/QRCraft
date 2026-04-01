@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -35,6 +36,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
+
     }
     buildFeatures {
         compose = true
@@ -71,4 +74,8 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.barcode.scanning)
     implementation(libs.qrose)
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
+    coreLibraryDesugaring(libs.desugar.jdk)
+
 }

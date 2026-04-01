@@ -3,6 +3,8 @@ package com.lihan.qrcraft.scan.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.lihan.qrcraft.core.domain.model.QRCodeHistory
+import com.lihan.qrcraft.scan.domain.repository.ScanRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,8 +12,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
-class ScanViewModel: ViewModel() {
+class ScanViewModel(
+    private val repository: ScanRepository
+): ViewModel() {
 
     private val _uiEvent = Channel<ScanUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -83,6 +90,16 @@ class ScanViewModel: ViewModel() {
             }
 
             delay(2000L)
+
+            repository.upsertQRCodeData(
+                QRCodeHistory(
+                    type = type,
+                    content = content,
+                    createdAt = Instant.now().toEpochMilli(),
+                    isGenerated = false,
+                    isFavorite = false
+                )
+            )
 
             _uiEvent.send(
                 ScanUiEvent.ScanSuccessToResult(

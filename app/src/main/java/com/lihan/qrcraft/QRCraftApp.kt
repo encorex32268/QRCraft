@@ -1,6 +1,7 @@
 package com.lihan.qrcraft
 
 import android.app.Application
+import com.lihan.qrcraft.core.di.coreModule
 import com.lihan.qrcraft.generate.di.generateModule
 import com.lihan.qrcraft.scan.di.scanModule
 import org.koin.android.ext.koin.androidContext
@@ -16,6 +17,7 @@ class QRCraftApp: Application() {
             androidContext(this@QRCraftApp)
             modules(
                 listOf(
+                    coreModule,
                     scanModule,
                     generateModule
                 )

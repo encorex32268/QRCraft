@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.lihan.qrcraft.core.domain.QRCodeType
-import com.lihan.qrcraft.scan.domain.Clipboard
+import com.lihan.qrcraft.core.domain.Clipboard
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.scan.presentation.result.ScanResultAction
 import com.lihan.qrcraft.scan.presentation.result.ScanResultState

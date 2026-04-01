@@ -159,7 +159,7 @@ fun ScanScreen(
                 }
             )
         }
-    ) {
+    ) {it
         Box(
             modifier = Modifier
                 .fillMaxSize()

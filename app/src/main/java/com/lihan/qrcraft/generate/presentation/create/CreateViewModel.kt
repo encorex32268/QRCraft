@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.domain.Route
+import com.lihan.qrcraft.core.domain.model.QRCodeHistory
+import com.lihan.qrcraft.generate.domain.repository.GenerateRepository
 import io.github.alexzhirkevich.qrose.QrData
 import io.github.alexzhirkevich.qrose.location
 import io.github.alexzhirkevich.qrose.phone
@@ -25,8 +27,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 class CreateViewModel(
+    private val repository: GenerateRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -92,6 +96,17 @@ class CreateViewModel(
         }
 
         viewModelScope.launch {
+
+            repository.upsert(
+                QRCodeHistory(
+                    type = currentState.type,
+                    content = dataString,
+                    createdAt = Instant.now().toEpochMilli(),
+                    isGenerated = true,
+                    isFavorite = false
+                )
+            )
+
             _uiEvent.send(
                 CreateUiEvent.NavigateToPreview(
                     type = currentState.type,

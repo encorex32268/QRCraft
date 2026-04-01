@@ -3,13 +3,14 @@ package com.lihan.qrcraft.scan.presentation.result
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
-import com.lihan.qrcraft.scan.domain.Clipboard
+import com.lihan.qrcraft.core.domain.Clipboard
 import com.lihan.qrcraft.core.domain.Route
+import com.lihan.qrcraft.scan.domain.repository.ScanRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ScanResultViewModel(
-    private val clipboard: Clipboard,
+    private val repository: ScanRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel(){
 
@@ -32,6 +33,6 @@ class ScanResultViewModel(
     }
 
     private fun copyToClipboard() {
-        clipboard.copyText(state.value.content)
+        repository.copyText(state.value.content)
     }
 }

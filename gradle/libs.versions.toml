@@ -16,6 +16,9 @@ koin = "4.1.1"
 barcodeScanning = "17.3.0"
 cameraCamera2 = "1.4.2"
 qrose = "1.1.2"
+room = "2.8.4"
+ksp = "2.3.4"
+desugar = "2.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,11 +61,22 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 #QRCodeGenerator
 qrose = { module = "io.github.alexzhirkevich:qrose",version.ref = "qrose"}
 
+#Room database
+room-runtime = { module = "androidx.room:room-runtime" , version.ref = "room"}
+room-ktx = { module = "androidx.room:room-ktx" , version.ref = "room"}
+room-compiler = { module = "androidx.room:room-compiler" , version.ref = "room"}
+
+#Desugar JDK
+desugar-jdk = { module = "com.android.tools:desugar_jdk_libs" , version.ref = "desugar"}
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp" , version.ref = "ksp"}
 
 [bundles]
 koin = ["koin-android","koin-androidx-compose","koin-core"]
+room = ["room-runtime","room-compiler","room-ktx"]

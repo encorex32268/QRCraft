@@ -1,9 +1,9 @@
-package com.lihan.qrcraft.scan.data
+package com.lihan.qrcraft.core.data
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import com.lihan.qrcraft.scan.domain.Clipboard
+import com.lihan.qrcraft.core.domain.Clipboard
 
 class AndroidClipboard(
     private val context: Context
