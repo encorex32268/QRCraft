@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.lihan.qrcraft.scan.domain.Clipboard
-import com.lihan.qrcraft.scan.domain.Route
+import com.lihan.qrcraft.core.domain.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
