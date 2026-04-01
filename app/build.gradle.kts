@@ -46,7 +46,11 @@ android {
         jvmToolchain(21)
     }
 }
-
+configurations.all {
+    resolutionStrategy {
+        force("com.google.guava:guava:31.1-android")
+    }
+}
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -77,5 +81,6 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
     coreLibraryDesugaring(libs.desugar.jdk)
-
+    //For Fix Cannot access class 'ListenableFuture'. Check your module classpath for missing or conflicting dependencies.
+    implementation(libs.kotlinx.coroutines.guava)
 }

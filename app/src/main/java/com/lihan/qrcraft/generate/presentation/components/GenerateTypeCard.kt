@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.core.presentation.Text
+import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
 import com.lihan.qrcraft.ui.theme.TextBG
@@ -53,20 +54,11 @@ fun GenerateTypeCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .background(iconBackgroundColor,CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = imageVector,
-                    contentDescription = text,
-                    tint = iconTintColor
-                )
-            }
+            CircleIcon(
+                backgroundColor = iconBackgroundColor,
+                imageVector = imageVector,
+                iconTintColor = iconTintColor
+            )
             Spacer(Modifier.height(12.dp))
             Text(
                 text = text,
