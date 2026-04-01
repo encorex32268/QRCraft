@@ -81,8 +81,8 @@ class ScanViewModel: ViewModel() {
                     barcode.rawValue?:""
                 }
             }
-            println("Type: $type / Content: $content")
-            delay(3000L)
+
+            delay(2000L)
 
             _uiEvent.send(
                 ScanUiEvent.ScanSuccessToResult(

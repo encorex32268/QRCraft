@@ -14,7 +14,7 @@ enum class QRCodeType(val type: Int){
     WiFi(Barcode.TYPE_WIFI);
 
     companion object{
-        fun getQRCodeType(type: Int): QRCodeType {
+        fun getQRCodeType(type: Int?): QRCodeType {
             return QRCodeType.entries.find { it.type == type }?: Text
         }
 

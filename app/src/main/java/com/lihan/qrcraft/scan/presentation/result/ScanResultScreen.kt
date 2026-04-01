@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
+import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.scan.presentation.result.components.ScanResultCard
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
@@ -41,19 +43,21 @@ fun ScanResultScreenRoot(
     viewModel: ScanResultViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     ScanResultScreen(
         state = state,
         onAction = { action ->
             when(action){
                 ScanResultAction.BackClick -> onBack()
-                ScanResultAction.CopyClick -> {
-
-                }
                 ScanResultAction.ShareClick -> {
-
+                    context.openShareSheet(
+                        title = QRCodeType.getQRCodeType(state.type).name,
+                        text = state.content)
                 }
+                else -> Unit
             }
+            viewModel.onAction(action)
         }
     )
 }
