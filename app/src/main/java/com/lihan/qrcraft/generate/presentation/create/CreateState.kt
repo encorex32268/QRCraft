@@ -7,4 +7,5 @@ data class CreateState(
     val textFieldStateFirst: TextFieldState = TextFieldState(),
     val textFieldStateSecond: TextFieldState = TextFieldState(),
     val textFieldStateThird: TextFieldState = TextFieldState(),
+    val generateButtonEnabled: Boolean = false
 )

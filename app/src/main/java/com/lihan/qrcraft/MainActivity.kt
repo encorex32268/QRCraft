@@ -42,6 +42,7 @@ import com.lihan.qrcraft.core.presentation.components.BottomNavigation
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.generate.presentation.GenerateScreen
 import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
+import com.lihan.qrcraft.generate.presentation.create.preview.PreviewScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
 import com.lihan.qrcraft.scan.presentation.result.ScanResultScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
@@ -142,6 +143,22 @@ class MainActivity : ComponentActivity() {
 
                         composable<Route.Create>{
                             CreateScreenRoot(
+                                onBack = {
+                                    navController.navigateUp()
+                                },
+                                navigateToPreview = { type , dataString ->
+                                    navController.navigate(
+                                        Route.Preview(
+                                            type = type,
+                                            content = dataString
+                                        )
+                                    )
+                                }
+                            )
+                        }
+
+                        composable<Route.Preview>{
+                            PreviewScreenRoot(
                                 onBack = {
                                     navController.navigateUp()
                                 }

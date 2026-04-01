@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.lihan.qrcraft.scan.presentation.result
+package com.lihan.qrcraft.generate.presentation.create.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,26 +30,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
-import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.core.presentation.components.ScanResultCard
+import com.lihan.qrcraft.core.presentation.util.openShareSheet
+import com.lihan.qrcraft.scan.presentation.result.ScanResultAction
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import org.koin.compose.viewmodel.koinViewModel
 
+
 @Composable
-fun ScanResultScreenRoot(
+fun PreviewScreenRoot(
     onBack: () -> Unit,
-    viewModel: ScanResultViewModel = koinViewModel()
+    viewModel: PreviewViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    ScanResultScreen(
+    PreviewScreen(
         state = state,
         onAction = { action ->
             when(action){
-                ScanResultAction.BackClick -> onBack()
-                ScanResultAction.ShareClick -> {
+                PreviewAction.BackClick -> onBack()
+                PreviewAction.ShareClick -> {
                     context.openShareSheet(
                         title = QRCodeType.getQRCodeType(state.type).name,
                         text = state.content)
@@ -62,9 +64,9 @@ fun ScanResultScreenRoot(
 }
 
 @Composable
-private fun ScanResultScreen(
-    state: ScanResultState,
-    onAction: (ScanResultAction) -> Unit,
+private fun PreviewScreen(
+    state: PreviewState,
+    onAction: (PreviewAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -75,7 +77,7 @@ private fun ScanResultScreen(
         CenterAlignedTopAppBar(
             title = {
                 Text(
-                    text = stringResource(R.string.scan_result),
+                    text = stringResource(R.string.preview),
                     style = MaterialTheme.typography.titleMedium,
                     color = OnOverlay
                 )
@@ -83,7 +85,7 @@ private fun ScanResultScreen(
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        onAction(ScanResultAction.BackClick)
+                        onAction(PreviewAction.BackClick)
                     }
                 ) {
                     Icon(
@@ -107,10 +109,10 @@ private fun ScanResultScreen(
                 type = state.type,
                 content = state.content,
                 onShare = {
-                    onAction(ScanResultAction.ShareClick)
+                    onAction(PreviewAction.ShareClick)
                 },
                 onCopy = {
-                    onAction(ScanResultAction.CopyClick)
+                    onAction(PreviewAction.CopyClick)
                 }
             )
         }
@@ -121,10 +123,10 @@ private fun ScanResultScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun ScanResultScreenPreview() {
+private fun PreviewScreenPreview() {
     QRCraftTheme {
-        ScanResultScreen(
-            state = ScanResultState(
+        PreviewScreen(
+            state = PreviewState(
                 type = QRCodeType.Text.type,
                 content = ""
             ),

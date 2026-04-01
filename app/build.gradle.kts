@@ -70,4 +70,5 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.barcode.scanning)
+    implementation(libs.qrose)
 }

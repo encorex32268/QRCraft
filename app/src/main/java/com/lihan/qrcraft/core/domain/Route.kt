@@ -22,4 +22,10 @@ sealed interface Route {
 
     @Serializable
     data class Create(val type: Int): Route
+
+    @Serializable
+    data class Preview(
+        val type: Int,
+        val content: String
+    ): Route
 }

@@ -15,6 +15,7 @@ navigation = "2.9.5"
 koin = "4.1.1"
 barcodeScanning = "17.3.0"
 cameraCamera2 = "1.4.2"
+qrose = "1.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +54,9 @@ barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref =
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
+
+#QRCodeGenerator
+qrose = { module = "io.github.alexzhirkevich:qrose",version.ref = "qrose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

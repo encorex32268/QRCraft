@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -39,6 +40,7 @@ import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.presentation.ArrowLeft
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
+import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.generate.presentation.components.CreateQRTextField
 import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.ui.theme.Primary
@@ -48,10 +50,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateScreenRoot(
+    navigateToPreview: (Int,String) -> Unit,
     onBack: () -> Unit,
     viewModel: CreateViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            is CreateUiEvent.NavigateToPreview -> navigateToPreview(uiEvent.type,uiEvent.dataString)
+        }
+    }
 
     CreateScreen(
         state = state,
@@ -84,7 +93,8 @@ fun CreateScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CenterAlignedTopAppBar(
             title = {
@@ -111,6 +121,7 @@ fun CreateScreen(
         Surface(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
+                .widthIn(max = 480.dp)
                 .fillMaxWidth()
                 .padding(16.dp),
             color = SurfaceHigher
@@ -154,7 +165,7 @@ fun CreateScreen(
                         )
                         CreateQRTextField(
                             modifier = Modifier.focusRequester(focusRequesterSecond),
-                            state = state.textFieldStateFirst,
+                            state = state.textFieldStateSecond,
                             placeholder = stringResource(R.string.longitude),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
@@ -185,7 +196,7 @@ fun CreateScreen(
                         )
                         CreateQRTextField(
                             modifier = Modifier.focusRequester(focusRequesterSecond),
-                            state = state.textFieldStateFirst,
+                            state = state.textFieldStateSecond,
                             placeholder = if (qrCodeType == QRCodeType.WiFi){
                                 stringResource(R.string.password)
                             }else{
@@ -205,7 +216,7 @@ fun CreateScreen(
                         )
                         CreateQRTextField(
                             modifier = Modifier.focusRequester(focusRequesterThird),
-                            state = state.textFieldStateFirst,
+                            state = state.textFieldStateThird,
                             placeholder = if (qrCodeType == QRCodeType.WiFi){
                                 stringResource(R.string.encryption_type)
                             }else{
@@ -231,7 +242,7 @@ fun CreateScreen(
                         keyboard?.hide()
                         onAction(CreateAction.GenerateButtonClick)
                     },
-                    enabled = true,
+                    enabled = state.generateButtonEnabled,
                     containerColor = Primary
                 )
             }

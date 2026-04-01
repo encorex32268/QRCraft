@@ -1,6 +1,7 @@
 package com.lihan.qrcraft.core.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -21,12 +22,14 @@ fun TextLinkButton(
         modifier = modifier,
         onClick = onClick
     ) {
-        Text(
-            modifier = Modifier.background(color = LinkBG),
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            color = Link
-        )
+        SelectionContainer {
+            Text(
+                modifier = Modifier.background(color = LinkBG),
+                text = text,
+                style = MaterialTheme.typography.labelLarge,
+                color = Link
+            )
+        }
     }
 
 }

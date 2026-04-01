@@ -2,6 +2,7 @@
 
 package com.lihan.qrcraft.generate.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,11 +39,15 @@ import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun GenerateScreen(
     onItemClick: (QRCodeTypeUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+   val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
+
    val items = remember {
        QRCodeType.entries.map { it.toQRCodeTypeUi() }
    }
@@ -62,9 +68,8 @@ fun GenerateScreen(
             }
         )
         Spacer(Modifier.height(16.dp))
-        //TODO: if not mobile width will 3
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(if (isWideDevice) 3 else 2),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
