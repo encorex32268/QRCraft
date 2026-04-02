@@ -1,6 +1,9 @@
 package com.lihan.qrcraft.core.presentation.screens.preview
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.lifecycle.SavedStateHandle
@@ -123,6 +126,7 @@ class PreviewViewModel(
     }
 
     private fun saveQRCode(){
+
         val currentState = state.value
 
         if (currentState.qrCodeHistoryUi == null){
@@ -147,11 +151,11 @@ class PreviewViewModel(
                 )
             )
         )
+        viewModelScope.launch{
+            val srcByteArray = painter.toByteArray(512,512)
+            val hasPaddingBitmapByteArray = createQRCodeImageWithPadding(srcByteArray)?: return@launch
 
-        val bytes = painter.toByteArray(512,512, ImageFormat.PNG)
-
-        viewModelScope.launch {
-            fileManager.saveFile(bytes)
+            fileManager.saveFile(hasPaddingBitmapByteArray)
 
             _uiEvent.send(PreviewUiEvent.SaveSucceed)
         }

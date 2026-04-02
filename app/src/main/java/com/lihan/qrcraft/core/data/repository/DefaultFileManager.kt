@@ -12,6 +12,8 @@ import com.lihan.qrcraft.core.domain.repository.FileManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.ExperimentalTime
 
@@ -20,13 +22,16 @@ class DefaultFileManager(
 ): FileManager {
 
     override suspend fun saveFile(byteArray: ByteArray) {
-        val fileName = "QRCraft_${java.time.Instant.now().toEpochMilli()}.png"
+        val time = LocalDateTime.now().atZone(ZoneId.systemDefault())
+        val timeString = "${time.hour}${time.minute}${time.second}${time.nano}"
+        val fileName = "QRCraft_${timeString}.png"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             saveToDownloadFolder(fileName,byteArray)
         }else{
             saveToDownloadFolderUnder10(fileName,byteArray)
         }
     }
+
 
     //Android 10+
     @RequiresApi(Build.VERSION_CODES.Q)
