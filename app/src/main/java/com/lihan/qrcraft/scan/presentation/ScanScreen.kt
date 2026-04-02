@@ -4,6 +4,9 @@ package com.lihan.qrcraft.scan.presentation
 
 import android.Manifest
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,11 +92,26 @@ fun ScanScreenRoot(
         }
     )
 
+    val imagePicker = rememberLauncherForActivityResult(
+        contract =  ActivityResultContracts.PickVisualMedia()
+    ) {
+        if (it != null){
+            viewModel.onAction(ScanAction.ScanQRCodeImage(it))
+        }
+    }
+
     ScanScreen(
         state = state,
         onAction = { action ->
             when(action){
                 ScanAction.CloseAppClick -> closeApp()
+                ScanAction.PickImageClick -> {
+                    imagePicker.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
+                }
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -202,11 +220,18 @@ fun ScanScreen(
                 }
                 status.isGranted && !state.isLoading -> {
                     ScanningView(
+                        isOpeningFlashlight = state.isOpeningFlashlight,
                         onSuccess = { barcodes ->
                             onAction(ScanAction.ScanSuccess(barcodes))
                         },
                         onFailed = { exception ->
                             onAction(ScanAction.ScanFailed(exception))
+                        },
+                        onFlashClick = {
+                            onAction(ScanAction.FlashClick)
+                        },
+                        onPickImageClick = {
+                            onAction(ScanAction.PickImageClick)
                         }
                     )
                 }
@@ -238,7 +263,8 @@ private fun ScanScreenPreview() {
                 }
             ),
             state = ScanState(
-                isLoading = false
+                isLoading = false,
+                isOpeningFlashlight = false
             ),
             onAction = {}
         )

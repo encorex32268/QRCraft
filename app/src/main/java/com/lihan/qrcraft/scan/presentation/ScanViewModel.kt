@@ -1,10 +1,13 @@
 package com.lihan.qrcraft.scan.presentation
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.domain.model.QRCodeHistory
 import com.lihan.qrcraft.core.domain.repository.HistoryRepository
+import com.lihan.qrcraft.scan.domain.QRCodeImageConverter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +18,8 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 class ScanViewModel(
-    private val repository: HistoryRepository
+    private val repository: HistoryRepository,
+    private val qrCodeImageConverter: QRCodeImageConverter
 ): ViewModel() {
 
     private val _uiEvent = Channel<ScanUiEvent>()
@@ -41,7 +45,45 @@ class ScanViewModel(
 
             is ScanAction.ScanFailed -> scanFailed(action.exception)
             is ScanAction.ScanSuccess -> scanSuccess(action.barcodes)
+            ScanAction.FlashClick -> flashClick()
+            is ScanAction.ScanQRCodeImage -> scanQRCodeImage(action.uri)
+            else -> Unit
         }
+    }
+
+    private fun scanQRCodeImage(uri: Uri){
+        viewModelScope.launch {
+            val result = qrCodeImageConverter.processQRCodeImage(uri)
+            if (result == null){
+                //Send UiEvent Error
+                //Or show error dialog
+                return@launch
+            }
+            val type = result.first
+            val content = result.second
+
+            val upsertId = repository.upsert(
+                QRCodeHistory(
+                    title = QRCodeType.getQRCodeType(type).name,
+                    content = content,
+                    createdAt = Instant.now().toEpochMilli(),
+                    isGenerated = false,
+                    isFavorite = false,
+                    type = type
+                )
+            )
+
+            _uiEvent.send(
+                ScanUiEvent.NavigateToPreview(upsertId)
+            )
+        }
+    }
+
+    private fun flashClick() {
+        val newFlash = !state.value.isOpeningFlashlight
+        _state.update { it.copy(
+            isOpeningFlashlight = newFlash
+        ) }
     }
 
     private fun scanFailed(exception: Exception){

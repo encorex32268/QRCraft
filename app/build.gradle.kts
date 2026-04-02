@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.barcode.scanning)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.qrose)
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)

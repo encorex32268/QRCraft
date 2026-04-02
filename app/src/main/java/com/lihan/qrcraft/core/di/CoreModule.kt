@@ -28,7 +28,6 @@ val coreModule = module {
     single { get<QRCraftDatabase>().qrCodeHistoryDao}.bind<QRCodeHistoryDao>()
 
     singleOf(::AndroidClipboard).bind<Clipboard>()
-
     singleOf(::QRCodeHistoryRepository).bind<HistoryRepository>()
 
     viewModelOf(::PreviewViewModel)
