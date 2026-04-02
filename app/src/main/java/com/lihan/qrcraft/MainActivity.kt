@@ -2,6 +2,7 @@ package com.lihan.qrcraft
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -32,21 +34,33 @@ import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
 import com.lihan.qrcraft.history.presentation.ScanHistoryScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.Surface
+
+
+fun NavDestination.currentRoute(): Route {
+    return listOf(
+        Route.History,
+        Route.Scan,
+        Route.Generate
+    ).first {
+        this.hasRoute(it::class)
+    }
+
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(Color.Transparent.toArgb(), Color.Black.toArgb())
+        )
         setContent {
             QRCraftTheme {
                 val navController = rememberNavController()
 
                 val startDestination = Route.Scan
 
-                var selectedRoute by remember{
-                    mutableStateOf<Route>(startDestination)
-                }
 
                 val currentRoute by navController
                     .currentBackStackEntryAsState()
@@ -65,7 +79,6 @@ class MainActivity : ComponentActivity() {
                             ){
                                 BottomNavigation(
                                     onItemClick = { bottomItem ->
-                                        selectedRoute = bottomItem.route
                                         navController.navigate(bottomItem.route) {
                                             popUpTo(navController.graph.startDestinationId) {
                                                 inclusive = true
@@ -73,7 +86,7 @@ class MainActivity : ComponentActivity() {
                                             launchSingleTop = true
                                         }
                                     },
-                                    selectedRoute = selectedRoute
+                                    currentRoute = currentRoute?.destination?.currentRoute()?:Route.Scan
                                 )
                             }
                         }

@@ -50,7 +50,8 @@ fun GenerateTypeCard(
             CircleIcon(
                 backgroundColor = iconBackgroundColor,
                 imageVector = imageVector,
-                iconTintColor = iconTintColor
+                iconTintColor = iconTintColor,
+                onClick = onItemClick
             )
             Spacer(Modifier.height(12.dp))
             Text(

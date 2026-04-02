@@ -29,7 +29,6 @@ fun CircleIcon(
             .size(size)
             .clip(CircleShape)
             .clickable(
-                enabled = onClick != null,
                 onClick = {
                     onClick?.invoke()
                 }

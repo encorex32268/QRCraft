@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import com.lihan.qrcraft.core.presentation.model.BottomItem
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.core.presentation.model.bottomItems
@@ -31,7 +33,7 @@ import com.lihan.qrcraft.ui.theme.SurfaceHigher
 
 @Composable
 fun BottomNavigation(
-    selectedRoute: Route,
+    currentRoute: Route,
     modifier: Modifier = Modifier,
     items: List<BottomItem> = bottomItems,
     onItemClick: (BottomItem) -> Unit,
@@ -49,7 +51,7 @@ fun BottomNavigation(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items.forEach { item ->
-                val isSelected = selectedRoute == item.route
+                val isSelected = currentRoute == item.route
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
@@ -61,7 +63,7 @@ fun BottomNavigation(
                     contentAlignment = Alignment.Center
                 ){
                     Icon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(22.dp),
                         imageVector = ImageVector.vectorResource(item.resId),
                         contentDescription = item.name
                     )
@@ -74,7 +76,10 @@ fun BottomNavigation(
                 .size(64.dp)
                 .background(color = Primary)
                 .padding(horizontal = 4.dp)
-                .clickable{
+                .clickable(
+                    indication = null,
+                    interactionSource = null
+                ){
                     val scan = items.find { it.route == Route.Scan }
                     scan?.let {
                         onItemClick(it)
@@ -102,7 +107,7 @@ private fun BottomNavigationPreview() {
         BottomNavigation(
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             onItemClick = {},
-            selectedRoute = Route.Generate
+            currentRoute = Route.Generate
         )
     }
 }
