@@ -8,6 +8,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,13 +24,14 @@ fun QRCraftIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    containerColor: Color = Primary,
 ) {
     IconButton(
         modifier = modifier,
         onClick = onClick,
         enabled = enabled,
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = Primary,
+            containerColor = containerColor,
             disabledContainerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContentColor = OnSurfaceDisabled

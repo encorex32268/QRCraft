@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,8 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
+import com.lihan.qrcraft.core.presentation.Copy
+import com.lihan.qrcraft.core.presentation.Share
+import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.core.presentation.components.TextLinkButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
+import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftIconButton
 import com.lihan.qrcraft.core.presentation.util.asString
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
@@ -64,6 +69,7 @@ fun QRCodePreviewCard(
     content: String,
     onShare: () -> Unit,
     onCopy:() -> Unit,
+    onSave:() -> Unit,
     modifier: Modifier = Modifier
 ) {
     val qrCodeType = remember(type) {
@@ -195,32 +201,33 @@ fun QRCodePreviewCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    QRCraftButton(
-                        modifier = Modifier.weight(1f),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.share),
-                                tint = MaterialTheme.colorScheme.onSurface,
-                                contentDescription = null
-                            )
-                        },
-                        text = stringResource(R.string.share),
-                        containerColor = SurfaceHigher,
-                        onClick = onShare
+                    CircleIcon(
+                        iconTintColor = MaterialTheme.colorScheme.onSurface,
+                        backgroundColor = SurfaceHigher,
+                        imageVector = Share,
+                        onClick = onShare,
+                        size = 44.dp
                     )
-
+                    CircleIcon(
+                        iconTintColor = MaterialTheme.colorScheme.onSurface,
+                        backgroundColor = SurfaceHigher,
+                        imageVector = Copy,
+                        onClick = onCopy,
+                        size = 44.dp
+                    )
                     QRCraftButton(
                         modifier = Modifier.weight(1f),
                         leadingIcon = {
                             Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.copy),
+                                modifier = Modifier.size(16.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.download),
                                 tint = MaterialTheme.colorScheme.onSurface,
                                 contentDescription = null
                             )
                         },
-                        text = stringResource(R.string.copy),
+                        text = stringResource(R.string.save),
                         containerColor = SurfaceHigher,
-                        onClick = onCopy
+                        onClick = onSave
                     )
                 }
             }
@@ -256,6 +263,7 @@ private fun QRCodePreviewCardPreview() {
             """.trimIndent(),
             onCopy = {},
             onShare = {},
+            onSave = {},
             titleTextFieldState = TextFieldState(initialText = "Te"),
             title = "Teee"
         )

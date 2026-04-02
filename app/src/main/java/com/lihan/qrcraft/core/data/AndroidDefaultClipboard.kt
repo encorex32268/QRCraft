@@ -3,11 +3,11 @@ package com.lihan.qrcraft.core.data
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import com.lihan.qrcraft.core.domain.Clipboard
+import com.lihan.qrcraft.core.domain.repository.DefaultClipboard
 
-class AndroidClipboard(
+class AndroidDefaultClipboard(
     private val context: Context
-): Clipboard {
+): DefaultClipboard {
 
     private val clipboardManager by lazy {
         context.getSystemService(ClipboardManager::class.java)

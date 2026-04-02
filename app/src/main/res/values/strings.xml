@@ -33,4 +33,7 @@
     <string name="history_empty">History is empty</string>
     <string name="delete">Delete</string>
     <string name="no_qrcode_found">No QR-codes found</string>
+    <string name="save">Save</string>
+    <string name="qr_code_not_found">QRCode not found</string>
+    <string name="save_qrcode_image_succeed">Image saved to Downloads</string>
 </resources>

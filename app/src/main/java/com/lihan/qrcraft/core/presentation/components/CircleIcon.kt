@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -20,15 +21,19 @@ fun CircleIcon(
     iconTintColor: Color,
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
+    size: Dp = 32.dp,
     onClick: (() -> Unit)?=null
 ) {
     Box(
         modifier = modifier
-            .size(32.dp)
+            .size(size)
             .clip(CircleShape)
-            .clickable(onClick = {
-                onClick?.invoke()
-            })
+            .clickable(
+                enabled = onClick != null,
+                onClick = {
+                    onClick?.invoke()
+                }
+            )
             .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {

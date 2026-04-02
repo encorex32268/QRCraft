@@ -26,10 +26,10 @@ import com.lihan.qrcraft.ui.theme.QRCraftTheme
 
 @Composable
 fun QRCraftButton(
-    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    text: String?=null,
     leadingIcon: @Composable (()->Unit)?=null,
     trailingIcon: @Composable (()->Unit)?=null,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
@@ -50,22 +50,25 @@ fun QRCraftButton(
         )
     ) {
         Row(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(4.dp),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (leadingIcon != null){
                 leadingIcon()
                 Spacer(Modifier.width(8.dp))
             }
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelLarge,
-                color = if (enabled){
-                    textColor
-                }else{
-                    OnSurfaceDisabled
-                }
-            )
+            if(text != null){
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (enabled){
+                        textColor
+                    }else{
+                        OnSurfaceDisabled
+                    }
+                )
+            }
             if (trailingIcon != null){
                 Spacer(Modifier.width(8.dp))
                 trailingIcon()

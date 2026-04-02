@@ -1,11 +1,13 @@
 package com.lihan.qrcraft.core.di
 
 import androidx.room.Room
-import com.lihan.qrcraft.core.data.AndroidClipboard
+import com.lihan.qrcraft.core.data.AndroidDefaultClipboard
 import com.lihan.qrcraft.core.data.local.QRCodeHistoryDao
 import com.lihan.qrcraft.core.data.local.QRCraftDatabase
+import com.lihan.qrcraft.core.data.repository.DefaultFileManager
 import com.lihan.qrcraft.core.data.repository.QRCodeHistoryRepository
-import com.lihan.qrcraft.core.domain.Clipboard
+import com.lihan.qrcraft.core.domain.repository.DefaultClipboard
+import com.lihan.qrcraft.core.domain.repository.FileManager
 import com.lihan.qrcraft.core.domain.repository.HistoryRepository
 import com.lihan.qrcraft.core.presentation.screens.preview.PreviewViewModel
 import org.koin.android.ext.koin.androidContext
@@ -27,8 +29,9 @@ val coreModule = module {
 
     single { get<QRCraftDatabase>().qrCodeHistoryDao}.bind<QRCodeHistoryDao>()
 
-    singleOf(::AndroidClipboard).bind<Clipboard>()
+    singleOf(::AndroidDefaultClipboard).bind<DefaultClipboard>()
     singleOf(::QRCodeHistoryRepository).bind<HistoryRepository>()
+    singleOf(::DefaultFileManager).bind<FileManager>()
 
     viewModelOf(::PreviewViewModel)
 
