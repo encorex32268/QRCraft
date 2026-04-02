@@ -52,6 +52,7 @@ import com.lihan.qrcraft.core.presentation.design_system.QRCraftSnackbar
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openAppSettings
 import com.lihan.qrcraft.scan.presentation.components.CameraPermissionDialog
+import com.lihan.qrcraft.scan.presentation.components.NoQRCodeFoundDialog
 import com.lihan.qrcraft.scan.presentation.components.ScanningView
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
@@ -197,6 +198,13 @@ fun ScanScreen(
                                     }
                                 }
                             }
+                        }
+                    )
+                }
+                state.isShowNoQRCodesFound -> {
+                    NoQRCodeFoundDialog(
+                        onDismiss = {
+                            onAction(ScanAction.DismissNoQRCodeFoundDialog)
                         }
                     )
                 }

@@ -4,4 +4,5 @@ data class ScanState(
     val isShowCameraPermissionDialog: Boolean = false,
     val isLoading: Boolean = false,
     val isOpeningFlashlight: Boolean = false,
+    val isShowNoQRCodesFound: Boolean = false
 )

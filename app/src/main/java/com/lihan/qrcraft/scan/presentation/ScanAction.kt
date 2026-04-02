@@ -13,4 +13,5 @@ sealed interface ScanAction{
     data object FlashClick: ScanAction
     data object PickImageClick: ScanAction
     data class ScanQRCodeImage(val uri: Uri): ScanAction
+    data object DismissNoQRCodeFoundDialog: ScanAction
 }

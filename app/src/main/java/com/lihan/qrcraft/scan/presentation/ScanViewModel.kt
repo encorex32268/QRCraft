@@ -47,6 +47,11 @@ class ScanViewModel(
             is ScanAction.ScanSuccess -> scanSuccess(action.barcodes)
             ScanAction.FlashClick -> flashClick()
             is ScanAction.ScanQRCodeImage -> scanQRCodeImage(action.uri)
+            ScanAction.DismissNoQRCodeFoundDialog -> {
+                _state.update { it.copy(
+                    isShowNoQRCodesFound = false
+                ) }
+            }
             else -> Unit
         }
     }
@@ -55,8 +60,9 @@ class ScanViewModel(
         viewModelScope.launch {
             val result = qrCodeImageConverter.processQRCodeImage(uri)
             if (result == null){
-                //Send UiEvent Error
-                //Or show error dialog
+                _state.update { it.copy(
+                    isShowNoQRCodesFound = true
+                ) }
                 return@launch
             }
             val type = result.first

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
@@ -114,7 +115,11 @@ fun DrawScope.drawQRCodeFrame(
     }
 
 
-    drawRect(
+    drawRoundRect(
+        cornerRadius = CornerRadius(
+            x = cornerRadiusPx - borderStrokeWidthPx ,
+            y = cornerRadiusPx - borderStrokeWidthPx
+        ),
         color = Color.Transparent,
         size = Size(
             width = size.width,
