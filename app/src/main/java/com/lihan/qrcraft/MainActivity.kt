@@ -6,48 +6,32 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.lihan.qrcraft.core.presentation.components.BottomNavigation
 import com.lihan.qrcraft.core.domain.Route
+import com.lihan.qrcraft.core.presentation.components.BottomNavigation
+import com.lihan.qrcraft.core.presentation.screens.preview.PreviewScreenRoot
 import com.lihan.qrcraft.generate.presentation.GenerateScreen
 import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
-import com.lihan.qrcraft.generate.presentation.create.preview.PreviewScreenRoot
 import com.lihan.qrcraft.history.presentation.ScanHistoryScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
-import com.lihan.qrcraft.scan.presentation.result.ScanResultScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +42,7 @@ class MainActivity : ComponentActivity() {
             QRCraftTheme {
                 val navController = rememberNavController()
 
-                val startDestination = Route.Generate
+                val startDestination = Route.Scan
 
                 var selectedRoute by remember{
                     mutableStateOf<Route>(startDestination)
@@ -102,26 +86,20 @@ class MainActivity : ComponentActivity() {
                     ){
                         composable<Route.Scan>{
                             ScanScreenRoot(
-                                navigateToResult = { type,content ->
+                                navigateToPreview = { id ->
                                     navController.navigate(
-                                        Route.ScanResult(
-                                            type = type,
-                                            content = content
+                                        Route.Preview(
+                                            id = id,
+                                            isEnabledTitle = false
                                         )
                                     )
                                 },
                                 closeApp = {
-                                    finishActivity(101)
+                                    finish()
                                 }
                             )
                         }
-                        composable<Route.ScanResult>{
-                            ScanResultScreenRoot(
-                                onBack = {
-                                    navController.navigateUp()
-                                }
-                            )
-                        }
+
                         composable<Route.Generate>{
                             GenerateScreen(
                                 onItemClick = { qrCodeTypeUi ->
@@ -137,11 +115,11 @@ class MainActivity : ComponentActivity() {
                                 onBack = {
                                     navController.navigateUp()
                                 },
-                                navigateToPreview = { type , dataString ->
+                                navigateToPreview = { id ->
                                     navController.navigate(
                                         Route.Preview(
-                                            type = type,
-                                            content = dataString
+                                            id = id,
+                                            isEnabledTitle = true
                                         )
                                     )
                                 }
@@ -156,8 +134,17 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable<Route.History>(){
-                            ScanHistoryScreenRoot()
+                        composable<Route.History>{
+                            ScanHistoryScreenRoot(
+                                navigateToPreview = { id ->
+                                    navController.navigate(
+                                        Route.Preview(
+                                            id = id,
+                                            isEnabledTitle = true
+                                        )
+                                    )
+                                }
+                            )
                         }
                     }
 

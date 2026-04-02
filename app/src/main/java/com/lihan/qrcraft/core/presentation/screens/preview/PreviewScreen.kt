@@ -1,7 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.lihan.qrcraft.generate.presentation.create.preview
+package com.lihan.qrcraft.core.presentation.screens.preview
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
-import com.lihan.qrcraft.core.presentation.components.ScanResultCard
+import com.lihan.qrcraft.core.presentation.screens.preview.components.QRCodePreviewCard
+import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
-import com.lihan.qrcraft.scan.presentation.result.ScanResultAction
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,23 +44,28 @@ fun PreviewScreenRoot(
     onBack: () -> Unit,
     viewModel: PreviewViewModel = koinViewModel()
 ){
-    val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when(uiEvent){
+            PreviewUiEvent.Back -> onBack()
+            PreviewUiEvent.DataError -> {
+                Toast.makeText(context, "QRCode Not found" , Toast.LENGTH_SHORT).show()
+                onBack()
+            }
+            is PreviewUiEvent.ShareQRCode -> {
+                context.openShareSheet(
+                    title = uiEvent.title,
+                    text = uiEvent.content
+                )
+            }
+        }
+    }
 
     PreviewScreen(
         state = state,
-        onAction = { action ->
-            when(action){
-                PreviewAction.BackClick -> onBack()
-                PreviewAction.ShareClick -> {
-                    context.openShareSheet(
-                        title = QRCodeType.getQRCodeType(state.type).name,
-                        text = state.content)
-                }
-                else -> Unit
-            }
-            viewModel.onAction(action)
-        }
+        onAction =  viewModel::onAction
     )
 }
 
@@ -77,7 +83,11 @@ private fun PreviewScreen(
         CenterAlignedTopAppBar(
             title = {
                 Text(
-                    text = stringResource(R.string.preview),
+                    text = if (state.isEnabledTitle){
+                        stringResource(R.string.preview)
+                    }else{
+                        stringResource(R.string.scan_result)
+                    },
                     style = MaterialTheme.typography.titleMedium,
                     color = OnOverlay
                 )
@@ -100,14 +110,16 @@ private fun PreviewScreen(
             )
         )
         Spacer(Modifier.height(28.dp))
-        if (state.type != null){
-            ScanResultCard(
+        if (state.qrCodeHistoryUi != null){
+            QRCodePreviewCard(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .widthIn(max = 480.dp)
                     .padding(16.dp),
-                type = state.type,
-                content = state.content,
+                type = state.qrCodeHistoryUi.type,
+                content = state.qrCodeHistoryUi.content,
+                title = state.qrCodeHistoryUi.title,
+                titleTextFieldState = state.title,
                 onShare = {
                     onAction(PreviewAction.ShareClick)
                 },
@@ -126,10 +138,7 @@ private fun PreviewScreen(
 private fun PreviewScreenPreview() {
     QRCraftTheme {
         PreviewScreen(
-            state = PreviewState(
-                type = QRCodeType.Text.type,
-                content = ""
-            ),
+            state = PreviewState(),
             onAction = {}
         )
     }

@@ -2,22 +2,15 @@
 
 package com.lihan.qrcraft.history.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,10 +20,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
@@ -39,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -56,7 +46,7 @@ import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
-import com.lihan.qrcraft.history.presentation.components.QRCodeHistoryItem
+import com.lihan.qrcraft.history.presentation.components.QRCodeHistoryList
 import com.lihan.qrcraft.ui.theme.OnSurface
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.Outline
@@ -70,6 +60,7 @@ private const val Generated = 1
 
 @Composable
 fun ScanHistoryScreenRoot(
+    navigateToPreview: (Long) -> Unit,
     viewModel: ScanHistoryViewModel = koinViewModel()
 ){
     val context = LocalContext.current
@@ -84,6 +75,10 @@ fun ScanHistoryScreenRoot(
                     text = uiEvent.content
                 )
             }
+
+            is ScanHistoryUiEvent.NavigateToPreview ->{
+                navigateToPreview(uiEvent.id)
+            }
         }
     }
 
@@ -94,6 +89,7 @@ fun ScanHistoryScreenRoot(
 }
 
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 private fun ScanHistoryScreen(
     state: ScanHistoryState,
@@ -183,54 +179,18 @@ private fun ScanHistoryScreen(
                 .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) { page ->
-            when(page){
-                Scanned -> {
-                    if (state.scannedItems.isEmpty()){
-                        EmptyView(text = stringResource(R.string.history_empty))
-                    }else{
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(state.scannedItems){ items ->
-                                QRCodeHistoryItem(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    type = items.type,
-                                    content = items.content,
-                                    timestamp = items.createdAt,
-                                    title = items.title,
-                                    onLongClick = {
-                                        onAction(ScanHistoryAction.ItemLongClick(items.id))
-                                    }
-                                )
-                            }
-                        }
-                    }
+
+            val displayItems = if (page == Scanned) state.scannedItems else state.generatedItems
+
+            QRCodeHistoryList(
+                items = displayItems,
+                onItemClick = {
+                    onAction(ScanHistoryAction.ItemClick(it))
+                },
+                onItemLongClick = {
+                    onAction(ScanHistoryAction.ItemLongClick(it))
                 }
-                Generated -> {
-                    if (state.generatedItems.isEmpty()){
-                        EmptyView(text = stringResource(R.string.history_empty))
-                    }else{
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(state.generatedItems){ items ->
-                                QRCodeHistoryItem(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    type = items.type,
-                                    content = items.content,
-                                    timestamp = items.createdAt,
-                                    title = items.title,
-                                    onLongClick = {
-                                        onAction(ScanHistoryAction.ItemLongClick(items.id))
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            )
         }
 
     }
@@ -288,22 +248,7 @@ private fun ScanHistoryScreen(
     }
 }
 
-@Composable
-fun EmptyView(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            color = OnSurfaceAlt
-        )
-    }
-}
+
 
 @Preview
 @Composable
@@ -318,7 +263,8 @@ private fun ScanHistoryScreenPreview() {
                         content = "Wifi content",
                         createdAt = 1750746960000L,
                         isFavorite = false,
-                        isGenerated = false
+                        isGenerated = false,
+                        id = 1
                     ),
                     QRCodeHistoryUi(
                         type = QRCodeType.WiFi.type,
@@ -326,7 +272,8 @@ private fun ScanHistoryScreenPreview() {
                         createdAt = 1750746960000L,
                         isFavorite = false,
                         isGenerated = false,
-                        title = "Test"
+                        title = "Test",
+                        id = 2
                     )
                 ),
                 generatedItems = listOf(
@@ -335,7 +282,8 @@ private fun ScanHistoryScreenPreview() {
                         content = "Geo content",
                         createdAt = 1750746960000L,
                         isFavorite = false,
-                        isGenerated = false
+                        isGenerated = false,
+                        id = 3
                     ),
                     QRCodeHistoryUi(
                         type = QRCodeType.Link.type,
@@ -343,7 +291,8 @@ private fun ScanHistoryScreenPreview() {
                         createdAt = 1750746960000L,
                         isFavorite = false,
                         isGenerated = false,
-                        title = "Test"
+                        title = "Test",
+                        id = 4
                     )
                 )
             ),

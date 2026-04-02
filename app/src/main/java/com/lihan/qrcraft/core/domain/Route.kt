@@ -9,12 +9,6 @@ sealed interface Route {
     data object Scan: Route
 
     @Serializable
-    data class ScanResult(
-        val type: Int,
-        val content: String
-    ): Route
-
-    @Serializable
     data object History: Route
 
     @Serializable
@@ -24,8 +18,5 @@ sealed interface Route {
     data class Create(val type: Int): Route
 
     @Serializable
-    data class Preview(
-        val type: Int,
-        val content: String
-    ): Route
+    data class Preview(val id: Long,val isEnabledTitle: Boolean): Route
 }

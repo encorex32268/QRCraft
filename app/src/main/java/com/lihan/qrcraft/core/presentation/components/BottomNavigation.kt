@@ -20,10 +20,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lihan.qrcraft.core.domain.BottomItem
-import com.lihan.qrcraft.core.domain.bottomItems
-import com.lihan.qrcraft.core.presentation.Scan
+import com.lihan.qrcraft.core.presentation.model.BottomItem
 import com.lihan.qrcraft.core.domain.Route
+import com.lihan.qrcraft.core.presentation.model.bottomItems
+import com.lihan.qrcraft.core.presentation.Scan
 import com.lihan.qrcraft.ui.theme.LinkBG
 import com.lihan.qrcraft.ui.theme.Primary
 import com.lihan.qrcraft.ui.theme.QRCraftTheme

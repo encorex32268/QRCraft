@@ -1,8 +1,9 @@
-package com.lihan.qrcraft.core.presentation.components
+package com.lihan.qrcraft.core.presentation.screens.preview.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,29 +15,40 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
+import com.lihan.qrcraft.core.presentation.components.TextLinkButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.util.asString
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
@@ -45,8 +57,10 @@ import com.lihan.qrcraft.ui.theme.SurfaceHigher
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 
 @Composable
-fun ScanResultCard(
+fun QRCodePreviewCard(
+    titleTextFieldState: TextFieldState,
     type: Int,
+    title: String?,
     content: String,
     onShare: () -> Unit,
     onCopy:() -> Unit,
@@ -61,6 +75,19 @@ fun ScanResultCard(
     var isShowMoreText by remember {
         mutableStateOf(false)
     }
+
+    val focusManager = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+
+    LaunchedEffect(isFocused) {
+        if (!isFocused){
+            keyboard?.hide()
+        }
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.TopCenter
@@ -76,10 +103,36 @@ fun ScanResultCard(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = qrCodeType.asString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                Spacer(Modifier.height(20.dp))
+                BasicTextField(
+                    interactionSource = interactionSource,
+                    state = titleTextFieldState,
+                    textStyle = MaterialTheme.typography.titleMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center
+                    ),
+                    decorator = { innerTextField ->
+                        Box(contentAlignment = Alignment.Center){
+                            if (titleTextFieldState.text.isEmpty()){
+                                Text(
+                                    modifier = Modifier.alpha(
+                                        if (isFocused) 0.2f else 1f
+                                    ),
+                                    text = title?:qrCodeType.asString(),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                            innerTextField()
+                        }
+                    },
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    onKeyboardAction = {
+                        focusManager.clearFocus(true)
+                    }
                 )
                 Spacer(Modifier.height(10.dp))
                 when(qrCodeType){
@@ -192,9 +245,9 @@ fun ScanResultCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun ScanResultCardPreview() {
+private fun QRCodePreviewCardPreview() {
     QRCraftTheme {
-        ScanResultCard(
+        QRCodePreviewCard(
             modifier = Modifier
                 .fillMaxWidth(),
             type = QRCodeType.WiFi.type,
@@ -202,7 +255,9 @@ private fun ScanResultCardPreview() {
                 Text
             """.trimIndent(),
             onCopy = {},
-            onShare = {}
+            onShare = {},
+            titleTextFieldState = TextFieldState(initialText = "Te"),
+            title = "Teee"
         )
     }
 }

@@ -1,9 +1,6 @@
 package com.lihan.qrcraft.core.domain
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.lihan.qrcraft.R
 
 enum class QRCodeType(val type: Int){
     Text(Barcode.TYPE_TEXT),

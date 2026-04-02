@@ -1,4 +1,4 @@
-package com.lihan.qrcraft.core.domain
+package com.lihan.qrcraft.core.presentation.model
 
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.Route

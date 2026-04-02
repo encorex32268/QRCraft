@@ -1,7 +1,6 @@
 package com.lihan.qrcraft.core.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface QRCodeHistoryDao{
 
     @Upsert
-    suspend fun upsertHistory(qrCodeHistoryEntity: QRCodeHistoryEntity)
+    suspend fun upsertHistory(qrCodeHistoryEntity: QRCodeHistoryEntity): Long
 
     @Query("UPDATE QRCodeHistoryEntity SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavoriteStatus(id: Long, isFavorite: Boolean)
@@ -32,6 +31,9 @@ interface QRCodeHistoryDao{
 
     @Query("DELETE FROM QRCodeHistoryEntity WHERE isGenerated = 1")
     suspend fun deleteAllGenerated()
+
+    @Query("SELECT * FROM QRCodeHistoryEntity WHERE id=:id")
+    fun getHistoryById(id: Int): Flow<QRCodeHistoryEntity?>
 
 
 }

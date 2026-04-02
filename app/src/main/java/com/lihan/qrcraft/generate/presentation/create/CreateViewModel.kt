@@ -8,19 +8,15 @@ import androidx.navigation.toRoute
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.core.domain.model.QRCodeHistory
-import com.lihan.qrcraft.generate.domain.repository.GenerateRepository
+import com.lihan.qrcraft.core.domain.repository.HistoryRepository
 import io.github.alexzhirkevich.qrose.QrData
-import io.github.alexzhirkevich.qrose.location
 import io.github.alexzhirkevich.qrose.phone
 import io.github.alexzhirkevich.qrose.text
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -30,7 +26,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 
 class CreateViewModel(
-    private val repository: GenerateRepository,
+    private val repository: HistoryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -77,7 +73,7 @@ class CreateViewModel(
         val secondTextFieldString = currentState.textFieldStateSecond.text.toString()
         val thirdTextFieldString = currentState.textFieldStateThird.text.toString()
 
-        val dataString = when(type){
+        val content = when(type){
             QRCodeType.PhoneNumber -> QrData.phone(firstTextFieldString)
             QRCodeType.Link,
             QRCodeType.Text -> QrData.text(firstTextFieldString)
@@ -97,10 +93,10 @@ class CreateViewModel(
 
         viewModelScope.launch {
 
-            repository.upsert(
+            val upsertId = repository.upsert(
                 QRCodeHistory(
                     type = currentState.type,
-                    content = dataString,
+                    content = content,
                     createdAt = Instant.now().toEpochMilli(),
                     isGenerated = true,
                     isFavorite = false
@@ -108,10 +104,7 @@ class CreateViewModel(
             )
 
             _uiEvent.send(
-                CreateUiEvent.NavigateToPreview(
-                    type = currentState.type,
-                    dataString = dataString
-                )
+                CreateUiEvent.NavigateToPreview(id = upsertId)
             )
         }
     }

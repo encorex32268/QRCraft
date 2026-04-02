@@ -1,4 +1,4 @@
-package com.lihan.qrcraft.generate.presentation.create.preview
+package com.lihan.qrcraft.core.presentation.screens.preview
 
 sealed interface PreviewAction{
     data object BackClick: PreviewAction

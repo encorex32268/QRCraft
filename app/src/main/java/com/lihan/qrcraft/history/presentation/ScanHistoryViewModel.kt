@@ -3,8 +3,8 @@ package com.lihan.qrcraft.history.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lihan.qrcraft.core.domain.QRCodeType
+import com.lihan.qrcraft.core.domain.repository.HistoryRepository
 import com.lihan.qrcraft.core.presentation.mapper.toUi
-import com.lihan.qrcraft.history.domain.HistoryRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -45,12 +45,14 @@ class ScanHistoryViewModel(
             is ScanHistoryAction.ItemLongClick -> itemLongClick(action.id)
             ScanHistoryAction.DeleteClick -> deleteItem()
             ScanHistoryAction.ShareClick -> shareQRCode()
+            is ScanHistoryAction.ItemClick -> itemClick(action.id)
             ScanHistoryAction.DismissEditorBottomSheet -> {
                 _state.update { it.copy(
                     isShowEditorBottomSheet = false,
                     selectedId = null
                 ) }
             }
+
         }
     }
 
@@ -105,13 +107,22 @@ class ScanHistoryViewModel(
         ) }
     }
 
+    private fun itemClick(id: Long?){
+        if (id == null) return
+        viewModelScope.launch {
+            _uiEvent.send(
+                ScanHistoryUiEvent.NavigateToPreview(id = id)
+            )
+        }
+    }
+
 
     private fun observeHistories() {
         repository
             .getScannedHistories()
             .onEach { scannedHistories ->
                 _state.update { it.copy(
-                    scannedItems = scannedHistories.map { domain ->
+                    scannedItems = scannedHistories.mapNotNull { domain ->
                         domain.toUi()
                     }
                 ) }
@@ -121,7 +132,7 @@ class ScanHistoryViewModel(
             .getGeneratedHistories()
             .onEach { generatedHistories ->
                 _state.update { it.copy(
-                    generatedItems = generatedHistories.map { domain ->
+                    generatedItems = generatedHistories.mapNotNull { domain ->
                         domain.toUi()
                     }
                 ) }

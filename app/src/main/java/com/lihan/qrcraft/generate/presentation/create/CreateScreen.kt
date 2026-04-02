@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -42,7 +41,6 @@ import com.lihan.qrcraft.core.presentation.ArrowLeft
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.generate.presentation.components.CreateQRTextField
-import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.ui.theme.Primary
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
@@ -50,7 +48,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateScreenRoot(
-    navigateToPreview: (Int,String) -> Unit,
+    navigateToPreview: (Long) -> Unit,
     onBack: () -> Unit,
     viewModel: CreateViewModel = koinViewModel()
 ){
@@ -58,7 +56,7 @@ fun CreateScreenRoot(
 
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
         when(uiEvent){
-            is CreateUiEvent.NavigateToPreview -> navigateToPreview(uiEvent.type,uiEvent.dataString)
+            is CreateUiEvent.NavigateToPreview -> navigateToPreview(uiEvent.id)
         }
     }
 
