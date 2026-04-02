@@ -1,10 +1,11 @@
-package com.lihan.qrcraft.core.data.mapper
+package com.lihan.qrcraft.core.presentation.mapper
 
 import com.lihan.qrcraft.core.data.local.QRCodeHistoryEntity
 import com.lihan.qrcraft.core.domain.model.QRCodeHistory
+import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
 
-fun QRCodeHistoryEntity.toDomain(): QRCodeHistory {
-    return QRCodeHistory(
+fun QRCodeHistory.toUi(): QRCodeHistoryUi {
+    return QRCodeHistoryUi(
         id = id,
         type = type,
         content = content,
@@ -15,8 +16,8 @@ fun QRCodeHistoryEntity.toDomain(): QRCodeHistory {
     )
 }
 
-fun QRCodeHistory.toEntity(): QRCodeHistoryEntity {
-    return QRCodeHistoryEntity(
+fun QRCodeHistoryUi.toDomain(): QRCodeHistory {
+    return QRCodeHistory(
         id = id,
         type = type,
         content = content,

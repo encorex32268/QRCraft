@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
+}
+
 android {
     namespace = "com.lihan.qrcraft"
     compileSdk {

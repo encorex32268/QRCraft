@@ -1,5 +1,7 @@
 package com.lihan.qrcraft.history.presentation.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -28,12 +31,14 @@ import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.OnSurfaceDisabled
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SurfaceHigher
 
 @Composable
 fun QRCodeHistoryItem(
     type: Int,
     content: String,
     timestamp: Long,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String?=null
 ) {
@@ -42,8 +47,13 @@ fun QRCodeHistoryItem(
     }
 
     Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp)
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .combinedClickable(
+                onClick = {},
+                onLongClick = onLongClick
+            ),
+        color = SurfaceHigher
     ) {
         Row(
             modifier = Modifier
@@ -101,13 +111,15 @@ private fun QRCodeHistoryItemPreview() {
             QRCodeHistoryItem(
                 type = QRCodeType.Link.type,
                 content = "https://www.google.com/maps",
-                timestamp = 1750746960000L
+                timestamp = 1750746960000L,
+                onLongClick = {}
             )
 
             QRCodeHistoryItem(
                 type = QRCodeType.Text.type,
                 content = "Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum justo metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium.",
-                timestamp = 1750746960000L
+                timestamp = 1750746960000L,
+                onLongClick = {}
             )
         }
 

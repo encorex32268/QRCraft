@@ -1,11 +1,6 @@
-package com.lihan.qrcraft.core.data.local
+package com.lihan.qrcraft.core.presentation.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
-data class QRCodeHistoryEntity(
-    @PrimaryKey(autoGenerate = true)
+data class QRCodeHistoryUi(
     val id: Long?=null,
     val title: String?=null,
     val type: Int,

@@ -43,6 +43,7 @@ import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.generate.presentation.GenerateScreen
 import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
 import com.lihan.qrcraft.generate.presentation.create.preview.PreviewScreenRoot
+import com.lihan.qrcraft.history.presentation.ScanHistoryScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
 import com.lihan.qrcraft.scan.presentation.result.ScanResultScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
@@ -121,16 +122,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable<Route.History>{
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ){
-                                Text(
-                                    text = "History"
-                                )
-                            }
-                        }
                         composable<Route.Generate>{
                             GenerateScreen(
                                 onItemClick = { qrCodeTypeUi ->
@@ -163,6 +154,10 @@ class MainActivity : ComponentActivity() {
                                     navController.navigateUp()
                                 }
                             )
+                        }
+
+                        composable<Route.History>(){
+                            ScanHistoryScreenRoot()
                         }
                     }
 
