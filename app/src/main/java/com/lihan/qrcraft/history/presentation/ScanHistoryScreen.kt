@@ -60,12 +60,14 @@ private const val Generated = 1
 
 @Composable
 fun ScanHistoryScreenRoot(
-    navigateToPreview: (Long) -> Unit,
+    navigateToPreview: (Long,String) -> Unit,
     viewModel: ScanHistoryViewModel = koinViewModel()
 ){
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val screenTitle = stringResource(R.string.preview)
 
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
         when(uiEvent){
@@ -77,7 +79,7 @@ fun ScanHistoryScreenRoot(
             }
 
             is ScanHistoryUiEvent.NavigateToPreview ->{
-                navigateToPreview(uiEvent.id)
+                navigateToPreview(uiEvent.id,screenTitle)
             }
         }
     }
@@ -189,6 +191,9 @@ private fun ScanHistoryScreen(
                 },
                 onItemLongClick = {
                     onAction(ScanHistoryAction.ItemLongClick(it))
+                },
+                onFavoriteClick = { id, isFavorite ->
+                    onAction(ScanHistoryAction.ItemFavoriteClick(id,isFavorite))
                 }
             )
         }

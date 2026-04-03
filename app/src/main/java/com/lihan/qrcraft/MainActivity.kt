@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -99,11 +100,11 @@ class MainActivity : ComponentActivity() {
                     ){
                         composable<Route.Scan>{
                             ScanScreenRoot(
-                                navigateToPreview = { id ->
+                                navigateToPreview = { id,screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
-                                            isEnabledTitle = false
+                                            screenTitle = screenTitle
                                         )
                                     )
                                 },
@@ -128,11 +129,11 @@ class MainActivity : ComponentActivity() {
                                 onBack = {
                                     navController.navigateUp()
                                 },
-                                navigateToPreview = { id ->
+                                navigateToPreview = { id,screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
-                                            isEnabledTitle = true
+                                            screenTitle = screenTitle
                                         )
                                     )
                                 }
@@ -149,11 +150,11 @@ class MainActivity : ComponentActivity() {
 
                         composable<Route.History>{
                             ScanHistoryScreenRoot(
-                                navigateToPreview = { id ->
+                                navigateToPreview = { id,screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
-                                            isEnabledTitle = true
+                                            screenTitle = screenTitle
                                         )
                                     )
                                 }

@@ -37,4 +37,8 @@ class QRCodeHistoryRepository(
        return qrCodeHistoryDao.getHistoryById(id.toInt()).map { it?.toDomain() }
     }
 
+    override suspend fun updateFavoriteStatus(id: Long, isFavorite: Boolean) {
+        return qrCodeHistoryDao.updateFavoriteStatus(id,isFavorite)
+    }
+
 }

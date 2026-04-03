@@ -21,6 +21,7 @@ import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 @Composable
 fun QRCodeHistoryList(
     items: List<QRCodeHistoryUi>,
+    onFavoriteClick: (Long,Boolean) -> Unit,
     onItemLongClick: (Long) -> Unit,
     onItemClick: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -34,20 +35,30 @@ fun QRCodeHistoryList(
         LazyColumn(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(bottom = 16.dp),
+
         ) {
             items(
                 items = items,
                 key = { it.id }
             ) { item ->
                 QRCodeHistoryItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
                     type = item.type,
                     content = item.content,
                     timestamp = item.createdAt,
                     title = item.title,
+                    isFavorite = item.isFavorite,
                     onItemLongClick = { onItemLongClick(item.id)},
-                    onItemClick = { onItemClick(item.id) }
+                    onItemClick = { onItemClick(item.id) },
+                    onFavoriteClick = {
+                        onFavoriteClick(
+                            item.id,
+                            item.isFavorite
+                        )
+                    }
                 )
             }
         }

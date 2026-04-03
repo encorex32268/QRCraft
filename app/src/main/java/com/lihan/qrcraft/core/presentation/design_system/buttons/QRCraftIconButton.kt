@@ -2,6 +2,7 @@ package com.lihan.qrcraft.core.presentation.design_system.buttons
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.ui.theme.OnSurfaceDisabled
@@ -24,7 +26,9 @@ fun QRCraftIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    tintColor: Color = MaterialTheme.colorScheme.onSurface,
     containerColor: Color = Primary,
+    iconSize: Dp = 16.dp,
 ) {
     IconButton(
         modifier = modifier,
@@ -38,8 +42,10 @@ fun QRCraftIconButton(
         )
     ) {
         Icon(
+            modifier = Modifier.size(iconSize),
             imageVector = imageVector,
             contentDescription = null,
+            tint = tintColor
         )
     }
 

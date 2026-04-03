@@ -56,3 +56,9 @@ val User: ImageVector
 val WiFi: ImageVector
     @Composable get() = ImageVector.vectorResource(R.drawable.wifi)
 
+val Star: ImageVector
+    @Composable get() = ImageVector.vectorResource(R.drawable.star)
+
+val StarFill: ImageVector
+    @Composable get() = ImageVector.vectorResource(R.drawable.star_fill)
+

@@ -18,5 +18,5 @@ sealed interface Route {
     data class Create(val type: Int): Route
 
     @Serializable
-    data class Preview(val id: Long,val isEnabledTitle: Boolean): Route
+    data class Preview(val id: Long,val screenTitle: String): Route
 }

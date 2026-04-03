@@ -31,7 +31,11 @@ import io.github.alexzhirkevich.qrose.toByteArray
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -54,7 +58,7 @@ class PreviewViewModel(
     private val _uiEvent = Channel<PreviewUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private val _state = MutableStateFlow(PreviewState())
+    private val _state = MutableStateFlow(PreviewState(screenTitle = route.screenTitle))
     val state = _state
         .onStart {
             if (!hasLoadedInitialData){
@@ -65,7 +69,7 @@ class PreviewViewModel(
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
-            PreviewState()
+            PreviewState(screenTitle = route.screenTitle)
         )
 
 
@@ -74,6 +78,7 @@ class PreviewViewModel(
             PreviewAction.CopyClick -> copyToClipboard()
             PreviewAction.BackClick -> backClick()
             PreviewAction.SaveClick -> saveQRCode()
+            PreviewAction.FavoriteClick -> favoriteClick()
             else -> Unit
         }
     }
@@ -81,15 +86,32 @@ class PreviewViewModel(
 
     private fun setupData(){
         val id = route.id
+
         viewModelScope.launch {
-            val item = repository.getHistoryById(id).first()?.toUi()
-            if (item == null){
+            repository
+                .getHistoryById(id)
+                .filterNotNull()
+                .onEach { qRCodeHistory ->
+                    _state.update { it.copy(
+                        qrCodeHistoryUi = qRCodeHistory.toUi()
+                    ) }
+                }
+                .launchIn(viewModelScope)
+
+        }
+    }
+
+    private fun favoriteClick(){
+        viewModelScope.launch {
+            val currentQRCodeHistoryUi = state.value.qrCodeHistoryUi
+            if (currentQRCodeHistoryUi == null){
                 _uiEvent.send(PreviewUiEvent.DataError)
-                return@launch
+            }else{
+               repository.updateFavoriteStatus(
+                   id = currentQRCodeHistoryUi.id,
+                   isFavorite = !currentQRCodeHistoryUi.isFavorite
+               )
             }
-            _state.update { it.copy(
-                qrCodeHistoryUi = item
-            ) }
         }
     }
 

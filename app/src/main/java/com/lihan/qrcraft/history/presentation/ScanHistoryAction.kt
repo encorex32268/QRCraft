@@ -6,4 +6,5 @@ sealed interface ScanHistoryAction {
     data object DeleteClick: ScanHistoryAction
     data object ShareClick: ScanHistoryAction
     data object DismissEditorBottomSheet: ScanHistoryAction
+    data class ItemFavoriteClick(val id: Long, val isFavorite: Boolean): ScanHistoryAction
 }

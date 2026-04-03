@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -40,6 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
+import com.lihan.qrcraft.core.presentation.ArrowLeft
+import com.lihan.qrcraft.core.presentation.Star
+import com.lihan.qrcraft.core.presentation.StarFill
 import com.lihan.qrcraft.core.presentation.design_system.QRCraftSnackbar
 import com.lihan.qrcraft.core.presentation.screens.preview.components.QRCodePreviewCard
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
@@ -130,11 +134,7 @@ private fun PreviewScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = if (state.isEnabledTitle){
-                            stringResource(R.string.preview)
-                        }else{
-                            stringResource(R.string.scan_result)
-                        },
+                        text = state.screenTitle,
                         style = MaterialTheme.typography.titleMedium,
                         color = OnOverlay
                     )
@@ -146,7 +146,25 @@ private fun PreviewScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.arrow_left),
+                            imageVector = ArrowLeft,
+                            contentDescription = null,
+                            tint = OnOverlay
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onAction(PreviewAction.FavoriteClick)
+                        }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = if (state.qrCodeHistoryUi?.isFavorite == true){
+                                StarFill
+                            }else{
+                                Star
+                            },
                             contentDescription = null,
                             tint = OnOverlay
                         )

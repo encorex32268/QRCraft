@@ -14,4 +14,6 @@ interface HistoryRepository {
     suspend fun deleteHistory(id: Long?)
 
     fun getHistoryById(id: Long): Flow<QRCodeHistory?>
+
+    suspend fun updateFavoriteStatus(id: Long, isFavorite: Boolean)
 }

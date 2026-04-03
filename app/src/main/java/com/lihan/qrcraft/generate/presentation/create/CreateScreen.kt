@@ -48,15 +48,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateScreenRoot(
-    navigateToPreview: (Long) -> Unit,
+    navigateToPreview: (Long,String) -> Unit,
     onBack: () -> Unit,
     viewModel: CreateViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val screenTitle = stringResource(R.string.preview)
+
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
         when(uiEvent){
-            is CreateUiEvent.NavigateToPreview -> navigateToPreview(uiEvent.id)
+            is CreateUiEvent.NavigateToPreview -> navigateToPreview(uiEvent.id,screenTitle)
         }
     }
 

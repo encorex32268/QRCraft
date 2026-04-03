@@ -53,8 +53,16 @@ class ScanHistoryViewModel(
                 ) }
             }
 
+            is ScanHistoryAction.ItemFavoriteClick -> itemFavoriteClick(action.id,action.isFavorite)
         }
     }
+
+    private fun itemFavoriteClick(id: Long , isFavorite: Boolean){
+        viewModelScope.launch {
+            repository.updateFavoriteStatus(id, !isFavorite)
+        }
+    }
+
 
     private fun shareQRCode(){
         val currentState = state.value

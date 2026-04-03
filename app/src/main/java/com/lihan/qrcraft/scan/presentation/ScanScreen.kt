@@ -64,16 +64,18 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScanScreenRoot(
-    navigateToPreview: (Long) -> Unit,
+    navigateToPreview: (Long,String) -> Unit,
     closeApp: () -> Unit,
     viewModel: ScanViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val scanResultScreenTitle = stringResource(R.string.scan_result)
+
     ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
         when(uiEvent){
             is ScanUiEvent.NavigateToPreview -> {
-                navigateToPreview(uiEvent.id)
+                navigateToPreview(uiEvent.id,scanResultScreenTitle)
             }
         }
     }
