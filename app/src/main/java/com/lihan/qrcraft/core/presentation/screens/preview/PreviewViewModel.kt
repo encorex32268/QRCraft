@@ -10,12 +10,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.core.domain.repository.DefaultClipboard
 import com.lihan.qrcraft.core.domain.repository.FileManager
 import com.lihan.qrcraft.core.domain.repository.HistoryRepository
 import com.lihan.qrcraft.core.presentation.mapper.toDomain
 import com.lihan.qrcraft.core.presentation.mapper.toUi
+import com.lihan.qrcraft.history.presentation.ScanHistoryUiEvent
 import io.github.alexzhirkevich.qrose.ImageFormat
 import io.github.alexzhirkevich.qrose.QrCodePainter
 import io.github.alexzhirkevich.qrose.options.QrBackground
@@ -79,7 +81,24 @@ class PreviewViewModel(
             PreviewAction.BackClick -> backClick()
             PreviewAction.SaveClick -> saveQRCode()
             PreviewAction.FavoriteClick -> favoriteClick()
+            PreviewAction.ShareClick -> shareQRCode()
             else -> Unit
+        }
+    }
+
+    private fun shareQRCode() {
+        val currentState = state.value
+        val qrCodeHistoryUi = currentState.qrCodeHistoryUi ?: return
+
+        viewModelScope.launch {
+
+            val title = qrCodeHistoryUi.title?: QRCodeType.getQRCodeType(qrCodeHistoryUi.type).name
+            _uiEvent.send(
+                PreviewUiEvent.ShareQRCode(
+                    title = title,
+                    content = qrCodeHistoryUi.content
+                )
+            )
         }
     }
 
