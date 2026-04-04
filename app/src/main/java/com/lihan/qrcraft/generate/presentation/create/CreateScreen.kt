@@ -43,6 +43,7 @@ import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.generate.presentation.components.CreateQRTextField
 import com.lihan.qrcraft.ui.theme.Primary
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -52,6 +53,8 @@ fun CreateScreenRoot(
     onBack: () -> Unit,
     viewModel: CreateViewModel = koinViewModel()
 ){
+    SetIsStatusBarsContentLightColor(false)
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val screenTitle = stringResource(R.string.preview)

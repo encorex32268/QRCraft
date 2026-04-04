@@ -33,6 +33,7 @@ import com.lihan.qrcraft.generate.presentation.components.GenerateTypeCard
 import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
@@ -40,8 +41,9 @@ fun GenerateScreen(
     onItemClick: (QRCodeTypeUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    SetIsStatusBarsContentLightColor(false)
 
-   val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
+    val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
 
    val items = remember {
        QRCodeType.entries.map { it.toQRCodeTypeUi() }

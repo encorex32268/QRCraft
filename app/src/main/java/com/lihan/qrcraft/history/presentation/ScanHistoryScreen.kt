@@ -51,6 +51,7 @@ import com.lihan.qrcraft.ui.theme.OnSurface
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.Outline
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -63,6 +64,8 @@ fun ScanHistoryScreenRoot(
     navigateToPreview: (Long,String) -> Unit,
     viewModel: ScanHistoryViewModel = koinViewModel()
 ){
+    SetIsStatusBarsContentLightColor(false)
+
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()

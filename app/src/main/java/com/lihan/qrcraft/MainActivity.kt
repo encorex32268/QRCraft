@@ -21,8 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -53,9 +55,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(Color.Transparent.toArgb(), Color.Black.toArgb())
-        )
+        enableEdgeToEdge()
         setContent {
             QRCraftTheme {
                 val navController = rememberNavController()
@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
                         composable<Route.Create>{
                             CreateScreenRoot(
                                 onBack = {
-                                    navController.navigateUp()
+                                    navController.safeNavigateUp()
                                 },
                                 navigateToPreview = { id,screenTitle ->
                                     navController.navigate(
@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
                         composable<Route.Preview>{
                             PreviewScreenRoot(
                                 onBack = {
-                                    navController.navigateUp()
+                                    navController.safeNavigateUp()
                                 }
                             )
                         }
@@ -175,4 +175,12 @@ fun NavDestination?.isMainRoute(): Boolean {
     return hasRoute<Route.Scan>() ||
             hasRoute<Route.History>() ||
             hasRoute<Route.Generate>()
+}
+
+fun NavHostController.safeNavigateUp() {
+    if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        if (!navigateUp()) {
+            popBackStack()
+        }
+    }
 }

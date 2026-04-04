@@ -58,6 +58,7 @@ import com.lihan.qrcraft.scan.presentation.components.ScanningView
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
 import com.lihan.qrcraft.ui.theme.Success
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -68,6 +69,8 @@ fun ScanScreenRoot(
     closeApp: () -> Unit,
     viewModel: ScanViewModel = koinViewModel()
 ){
+    SetIsStatusBarsContentLightColor(true)
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val scanResultScreenTitle = stringResource(R.string.scan_result)

@@ -3,7 +3,6 @@
 package com.lihan.qrcraft.core.presentation.screens.preview
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,15 +31,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.presentation.ArrowLeft
 import com.lihan.qrcraft.core.presentation.Star
 import com.lihan.qrcraft.core.presentation.StarFill
@@ -50,9 +46,9 @@ import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.ui.theme.OnOverlay
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
 import com.lihan.qrcraft.ui.theme.Success
 import kotlinx.coroutines.launch
-import org.checkerframework.checker.units.qual.s
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -61,6 +57,8 @@ fun PreviewScreenRoot(
     onBack: () -> Unit,
     viewModel: PreviewViewModel = koinViewModel()
 ){
+    SetIsStatusBarsContentLightColor(true)
+
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
