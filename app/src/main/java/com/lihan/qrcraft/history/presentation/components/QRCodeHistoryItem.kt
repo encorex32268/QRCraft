@@ -76,7 +76,8 @@ fun QRCodeHistoryItem(
                 CircleIcon(
                     backgroundColor = qrCodeTypeUi.iconBackgroundColor,
                     imageVector = ImageVector.vectorResource(qrCodeTypeUi.iconResId),
-                    iconTintColor = qrCodeTypeUi.iconTintColor
+                    iconTintColor = qrCodeTypeUi.iconTintColor,
+                    onClick = onItemClick
                 )
                 Column(
                     modifier = Modifier

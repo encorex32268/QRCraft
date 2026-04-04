@@ -82,10 +82,18 @@ class CreateViewModel(
                 val lng = secondTextFieldString.toFloatOrNull()?:0f
                 QrData.text("${lat},${lng}")
             }
-            QRCodeType.Contact,
-            QRCodeType.WiFi -> {
+            QRCodeType.Contact -> {
                 QrData.text(
                     firstTextFieldString + "\n" + secondTextFieldString + "\n" + thirdTextFieldString
+                )
+            }
+            QRCodeType.WiFi -> {
+                QrData.text(
+                    """
+                        SSID: $firstTextFieldString
+                        Password: $secondTextFieldString
+                        Encryption type: $thirdTextFieldString
+                    """.trimIndent()
                 )
             }
 

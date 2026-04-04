@@ -1,10 +1,13 @@
 package com.lihan.qrcraft.history.presentation.components
 
+import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -93,6 +96,11 @@ fun QRCodeHistoryList(
                         }
                     }
                 )
+            }
+            if (items.isNotEmpty()){
+                item {
+                    Spacer(Modifier.height(90.dp))
+                }
             }
         }
     }
