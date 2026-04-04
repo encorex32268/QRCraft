@@ -141,7 +141,15 @@ class PreviewViewModel(
                 _uiEvent.send(PreviewUiEvent.DataError)
             }
         }else{
-            clipboard.copyText(currentQRCodeHistoryUi.content)
+            if (currentQRCodeHistoryUi.type == QRCodeType.WiFi.type) {
+                val content = currentQRCodeHistoryUi.content
+                val password = content
+                    .split("\n").getOrNull(1)
+                    ?.split(":")?.getOrNull(1)?:content
+                clipboard.copyText(password)
+            }else{
+                clipboard.copyText(currentQRCodeHistoryUi.content)
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.lihan.qrcraft.ui.theme.Link
 import com.lihan.qrcraft.ui.theme.LinkBG
@@ -16,7 +17,9 @@ import com.lihan.qrcraft.ui.theme.QRCraftTheme
 fun TextLinkButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color = Link,
+    background: Color = LinkBG
 ) {
     TextButton(
         modifier = modifier,
@@ -24,10 +27,10 @@ fun TextLinkButton(
     ) {
         SelectionContainer {
             Text(
-                modifier = Modifier.background(color = LinkBG),
+                modifier = Modifier.background(color = background),
                 text = text,
                 style = MaterialTheme.typography.labelLarge,
-                color = Link
+                color = color
             )
         }
     }

@@ -1,5 +1,8 @@
 package com.lihan.qrcraft.core.presentation.screens.preview.components
 
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -56,9 +60,22 @@ import com.lihan.qrcraft.core.presentation.components.TextLinkButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftIconButton
 import com.lihan.qrcraft.core.presentation.util.asString
+import com.lihan.qrcraft.core.presentation.util.openAddContact
+import com.lihan.qrcraft.core.presentation.util.openBrowser
+import com.lihan.qrcraft.core.presentation.util.openCallPhone
+import com.lihan.qrcraft.core.presentation.util.openMapOrBrowser
+import com.lihan.qrcraft.core.presentation.util.openWifiSettings
+import com.lihan.qrcraft.ui.theme.Contact
+import com.lihan.qrcraft.ui.theme.ContactBG
+import com.lihan.qrcraft.ui.theme.Geo
+import com.lihan.qrcraft.ui.theme.GeoBG
 import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.ui.theme.Phone
+import com.lihan.qrcraft.ui.theme.PhoneBG
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.ui.theme.WiFi
+import com.lihan.qrcraft.ui.theme.WiFiBG
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 
 @Composable
@@ -72,6 +89,8 @@ fun QRCodePreviewCard(
     onSave:() -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     val qrCodeType = remember(type) {
         QRCodeType.getQRCodeType(type)
     }
@@ -142,20 +161,66 @@ fun QRCodePreviewCard(
                 )
                 Spacer(Modifier.height(10.dp))
                 when(qrCodeType){
-                    QRCodeType.PhoneNumber,
-                    QRCodeType.Geolocation,
-                    QRCodeType.WiFi,
-                    QRCodeType.Contact -> {
-                        SelectionContainer(
-                            modifier = Modifier.fillMaxWidth()
-                        ){
-                            Text(
-                                text = content,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                textAlign = TextAlign.Center
-                            )
+                    QRCodeType.Link -> {
+                        TextLinkButton(
+                            text = content,
+                            onClick = { context.openBrowser(content) }
+                        )
+                    }
+                    QRCodeType.PhoneNumber -> {
+                        val phoneNumber = when{
+                            content.contains(":") -> {
+                                content.split(":").getOrNull(1).toString()
+                            }
+                            content.contains("+") -> {
+                                "+" + content.split("+").getOrNull(1).toString()
+                            }
+                            else -> content
                         }
+                        TextLinkButton(
+                            text = content,
+                            onClick = { context.openCallPhone(phoneNumber) },
+                            color = Phone,
+                            background = PhoneBG
+                        )
+                    }
+                    QRCodeType.Geolocation -> {
+                        val lat = content.split(",").getOrNull(0)?.toDoubleOrNull()?:0.0
+                        val lng = content.split(",").getOrNull(1)?.toDoubleOrNull()?:0.0
+                        TextLinkButton(
+                            text = content,
+                            onClick = { context.openMapOrBrowser(lat,lng) },
+                            color = Geo,
+                            background = GeoBG,
+                        )
+                    }
+                    QRCodeType.WiFi -> {
+                        TextLinkButton(
+                            text = content,
+                            color = WiFi,
+                            background = WiFiBG,
+                            onClick = {
+                                onCopy()
+                                context.openWifiSettings()
+                            }
+                        )
+                    }
+                    QRCodeType.Contact -> {
+                        val name = content.split("\n").getOrNull(0)?:"Unknown"
+                        val email = content.split("\n").getOrNull(1)?:"email"
+                        val phoneNumber = content.split("\n").getOrNull(2)?:"phoneNumber"
+                        TextLinkButton(
+                            text = content,
+                            color = Contact,
+                            background = ContactBG,
+                            onClick = {
+                                context.openAddContact(
+                                    name = name,
+                                    phone = phoneNumber,
+                                    email = email
+                                )
+                            }
+                        )
                     }
                     QRCodeType.Text -> {
                         SelectionContainer(
@@ -185,14 +250,6 @@ fun QRCodePreviewCard(
                                 color = OnSurfaceAlt
                             )
                         }
-                    }
-                    QRCodeType.Link -> {
-                        TextLinkButton(
-                            text = content,
-                            onClick = {
-
-                            }
-                        )
                     }
                 }
                 Spacer(Modifier.height(24.dp))

@@ -20,7 +20,7 @@ import java.time.Instant
 class ScanViewModel(
     private val repository: HistoryRepository,
     private val qrCodeImageConverter: QRCodeImageConverter
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiEvent = Channel<ScanUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -28,19 +28,24 @@ class ScanViewModel(
     private val _state = MutableStateFlow(ScanState())
     val state = _state.asStateFlow()
 
-    fun onAction(action: ScanAction){
-        when(action){
+    fun onAction(action: ScanAction) {
+        when (action) {
             ScanAction.CloseAppClick -> Unit
             ScanAction.GrantAccessClick -> Unit
             ScanAction.DismissCameraPermissionDialog -> {
-                _state.update { it.copy(
-                    isShowCameraPermissionDialog = false
-                ) }
+                _state.update {
+                    it.copy(
+                        isShowCameraPermissionDialog = false
+                    )
+                }
             }
-            ScanAction.ShowCameraPermissionDialog ->{
-                _state.update { it.copy(
-                    isShowCameraPermissionDialog = true
-                ) }
+
+            ScanAction.ShowCameraPermissionDialog -> {
+                _state.update {
+                    it.copy(
+                        isShowCameraPermissionDialog = true
+                    )
+                }
             }
 
             is ScanAction.ScanFailed -> scanFailed(action.exception)
@@ -48,21 +53,26 @@ class ScanViewModel(
             ScanAction.FlashClick -> flashClick()
             is ScanAction.ScanQRCodeImage -> scanQRCodeImage(action.uri)
             ScanAction.DismissNoQRCodeFoundDialog -> {
-                _state.update { it.copy(
-                    isShowNoQRCodesFound = false
-                ) }
+                _state.update {
+                    it.copy(
+                        isShowNoQRCodesFound = false
+                    )
+                }
             }
+
             else -> Unit
         }
     }
 
-    private fun scanQRCodeImage(uri: Uri){
+    private fun scanQRCodeImage(uri: Uri) {
         viewModelScope.launch {
             val result = qrCodeImageConverter.processQRCodeImage(uri)
-            if (result == null){
-                _state.update { it.copy(
-                    isShowNoQRCodesFound = true
-                ) }
+            if (result == null) {
+                _state.update {
+                    it.copy(
+                        isShowNoQRCodesFound = true
+                    )
+                }
                 return@launch
             }
             val type = result.first
@@ -87,34 +97,41 @@ class ScanViewModel(
 
     private fun flashClick() {
         val newFlash = !state.value.isOpeningFlashlight
-        _state.update { it.copy(
-            isOpeningFlashlight = newFlash
-        ) }
+        _state.update {
+            it.copy(
+                isOpeningFlashlight = newFlash
+            )
+        }
     }
 
-    private fun scanFailed(exception: Exception){
+    private fun scanFailed(exception: Exception) {
         exception.printStackTrace()
     }
 
-    private fun scanSuccess(barcodes: List<Barcode>){
+    private fun scanSuccess(barcodes: List<Barcode>) {
         viewModelScope.launch {
-            _state.update { it.copy(
-                isLoading = true
-            ) }
+            _state.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val barcode = barcodes.first()
             val type = barcode.valueType
 
-            val content = when(type){
+            val content = when (type) {
                 Barcode.TYPE_URL -> {
-                    barcode.url?.url?:""
+                    barcode.url?.url ?: ""
                 }
-                Barcode.TYPE_PHONE,->{
+
+                Barcode.TYPE_PHONE -> {
                     "${barcode.phone?.type} ${barcode.phone?.number}"
                 }
+
                 Barcode.TYPE_GEO -> {
                     "${barcode.geoPoint?.lat},${barcode.geoPoint?.lng}"
                 }
+
                 Barcode.TYPE_WIFI -> {
                     """
                 SSID: ${barcode.wifi?.ssid}
@@ -123,16 +140,20 @@ class ScanViewModel(
                 """.trimIndent()
 
                 }
-                Barcode.TYPE_CONTACT_INFO ->{
+
+                Barcode.TYPE_CONTACT_INFO -> {
+                    val contact = barcode.contactInfo
+                    val name = contact?.name?.formattedName ?: ""
+                    val emails = contact?.emails?.joinToString("\n") { it.address ?: "" } ?: ""
+                    val phones = contact?.phones?.joinToString("\n") { it.number ?: "" } ?: ""
                     """
-                ${barcode.contactInfo?.name}
-                ${barcode.contactInfo?.emails}
-                ${barcode.contactInfo?.phones?.joinToString(" ")}"
-                """.trimIndent()
+                        $name
+                        $emails
+                        $phones
+                    """.trimIndent()
                 }
-                else -> {
-                    barcode.rawValue?:""
-                }
+
+                else -> barcode.rawValue?:""
             }
 
             delay(1000L)
@@ -152,9 +173,11 @@ class ScanViewModel(
             )
 
             delay(300L)
-            _state.update { it.copy(
-                isLoading = false
-            ) }
+            _state.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
 
 
