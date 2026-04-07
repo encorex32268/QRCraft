@@ -31,6 +31,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.lihan.qrcraft.core.domain.Route
 import com.lihan.qrcraft.core.presentation.components.BottomNavigation
+import com.lihan.qrcraft.core.presentation.navigation.currentRoute
+import com.lihan.qrcraft.core.presentation.navigation.isMainRoute
+import com.lihan.qrcraft.core.presentation.navigation.safeNavigateUp
 import com.lihan.qrcraft.core.presentation.screens.preview.PreviewScreenRoot
 import com.lihan.qrcraft.generate.presentation.GenerateScreen
 import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
@@ -39,17 +42,6 @@ import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
 import com.lihan.qrcraft.ui.theme.QRCraftTheme
 import com.lihan.qrcraft.ui.theme.Surface
 
-
-fun NavDestination.currentRoute(): Route {
-    return listOf(
-        Route.History,
-        Route.Scan,
-        Route.Generate
-    ).first {
-        this.hasRoute(it::class)
-    }
-
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +53,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 val startDestination = Route.Scan
-
-
                 val currentRoute by navController
                     .currentBackStackEntryAsState()
 
@@ -70,37 +60,37 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     containerColor = Color.Transparent,
                     bottomBar = {
-                        if (currentRoute?.destination.isMainRoute()){
+                        if (currentRoute?.destination.isMainRoute()) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(Color.Transparent)
                                     .navigationBarsPadding(),
                                 contentAlignment = Alignment.Center
-                            ){
+                            ) {
                                 BottomNavigation(
                                     onItemClick = { bottomItem ->
                                         navController.navigate(bottomItem.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                inclusive = true
-                                            }
+                                            popUpTo(navController.graph.startDestinationId)
                                             launchSingleTop = true
                                         }
                                     },
-                                    currentRoute = currentRoute?.destination?.currentRoute()?:Route.Scan
+                                    currentRoute = currentRoute?.destination?.currentRoute()
+                                        ?: Route.Scan
                                 )
                             }
                         }
                     }
-                ) {  it
+                ) {
+                    it
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navController,
                         startDestination = startDestination
-                    ){
-                        composable<Route.Scan>{
+                    ) {
+                        composable<Route.Scan> {
                             ScanScreenRoot(
-                                navigateToPreview = { id,screenTitle ->
+                                navigateToPreview = { id, screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
@@ -114,7 +104,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable<Route.Generate>{
+                        composable<Route.Generate> {
                             GenerateScreen(
                                 onItemClick = { qrCodeTypeUi ->
                                     navController.navigate(
@@ -124,12 +114,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable<Route.Create>{
+                        composable<Route.Create> {
                             CreateScreenRoot(
                                 onBack = {
                                     navController.safeNavigateUp()
                                 },
-                                navigateToPreview = { id,screenTitle ->
+                                navigateToPreview = { id, screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
@@ -140,7 +130,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable<Route.Preview>{
+                        composable<Route.Preview> {
                             PreviewScreenRoot(
                                 onBack = {
                                     navController.safeNavigateUp()
@@ -148,9 +138,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable<Route.History>{
+                        composable<Route.History> {
                             ScanHistoryScreenRoot(
-                                navigateToPreview = { id,screenTitle ->
+                                navigateToPreview = { id, screenTitle ->
                                     navController.navigate(
                                         Route.Preview(
                                             id = id,
@@ -161,26 +151,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-
                 }
-
-
             }
         }
     }
 }
 
-fun NavDestination?.isMainRoute(): Boolean {
-    this ?: return false
-    return hasRoute<Route.Scan>() ||
-            hasRoute<Route.History>() ||
-            hasRoute<Route.Generate>()
-}
-
-fun NavHostController.safeNavigateUp() {
-    if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-        if (!navigateUp()) {
-            popBackStack()
-        }
-    }
-}
