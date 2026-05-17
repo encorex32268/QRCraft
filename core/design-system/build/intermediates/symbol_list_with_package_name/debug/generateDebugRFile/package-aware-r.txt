@@ -1,0 +1,4 @@
+com.lihan.qrcraft.core.design_system
+font suse_medium
+font suse_regular
+font suse_semibold

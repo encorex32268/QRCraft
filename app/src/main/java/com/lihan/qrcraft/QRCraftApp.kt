@@ -1,10 +1,11 @@
 package com.lihan.qrcraft
 
 import android.app.Application
-import com.lihan.qrcraft.core.di.coreModule
-import com.lihan.qrcraft.generate.di.generateModule
-import com.lihan.qrcraft.history.di.historyModule
-import com.lihan.qrcraft.scan.di.scanModule
+import com.lihan.qrcraft.core.data.di.coreModule
+import com.lihan.qrcraft.core.presentation.di.presentationModule
+import com.lihan.qrcraft.generate.presentation.di.generateModule
+import com.lihan.qrcraft.history.presentation.di.historyModule
+import com.lihan.qrcraft.scan.presentation.di.scanModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,6 +20,7 @@ class QRCraftApp: Application() {
             modules(
                 listOf(
                     coreModule,
+                    presentationModule,
                     scanModule,
                     generateModule,
                     historyModule

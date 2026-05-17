@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml:2:13-83
+INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml:2:13-83
+	package
+		INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml
+	xmlns:android
+		ADDED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml:2:23-81
+uses-sdk
+INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml reason: use-sdk injection requested
+INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml
+INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml
+	android:targetSdkVersion
+		INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml
+	android:minSdkVersion
+		INJECTED from /Users/lihan/SideProject/QRCraft/history/data/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10819834218314945942.xml

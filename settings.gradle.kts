@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -24,3 +25,21 @@ dependencyResolutionManagement {
 
 rootProject.name = "QRCraft"
 include(":app")
+include(":core:domain")
+include(":core:data")
+include(":core:presentation")
+include(":core:design-system")
+
+include(":scan:domain")
+include(":scan:data")
+include(":scan:presentation")
+
+include(":generate:domain")
+include(":generate:data")
+include(":generate:presentation")
+
+include(":history:domain")
+include(":history:data")
+include(":history:presentation")
+
+

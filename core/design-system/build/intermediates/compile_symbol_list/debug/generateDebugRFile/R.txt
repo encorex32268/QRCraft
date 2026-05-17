@@ -1,0 +1,3 @@
+int font suse_medium 0x0
+int font suse_regular 0x0
+int font suse_semibold 0x0

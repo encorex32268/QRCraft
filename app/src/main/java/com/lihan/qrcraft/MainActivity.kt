@@ -39,8 +39,8 @@ import com.lihan.qrcraft.generate.presentation.GenerateScreen
 import com.lihan.qrcraft.generate.presentation.create.CreateScreenRoot
 import com.lihan.qrcraft.history.presentation.ScanHistoryScreenRoot
 import com.lihan.qrcraft.scan.presentation.ScanScreenRoot
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.Surface
+import com.lihan.qrcraft.core.design_system.QRCraftTheme
+import com.lihan.qrcraft.core.design_system.Surface
 
 
 class MainActivity : ComponentActivity() {
