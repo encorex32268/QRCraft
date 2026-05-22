@@ -41,11 +41,8 @@ import com.lihan.qrcraft.core.presentation.FlashOff
 import com.lihan.qrcraft.core.presentation.Image
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.scan.presentation.BarcodeAnalyzer
-import com.lihan.qrcraft.core.ui.theme.OnOverlay
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun ScanningView(
@@ -146,7 +143,7 @@ fun ScanningView(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = OnSurfaceAlt.copy(alpha = 0.5f))
+                .background(color = MaterialTheme.colorScheme.appColors.onSurfaceAlt.copy(alpha = 0.5f))
         )
 
         Box(
@@ -155,7 +152,7 @@ fun ScanningView(
         ) {
 
             CircleIcon(
-                backgroundColor = if (isOpeningFlashlight) Primary else SurfaceHigher,
+                backgroundColor = if (isOpeningFlashlight) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.appColors.surfaceHigher,
                 iconTintColor = MaterialTheme.colorScheme.onSurface,
                 imageVector = if (isOpeningFlashlight) FlashOff else Flash,
                 modifier = Modifier
@@ -167,7 +164,7 @@ fun ScanningView(
             )
 
             CircleIcon(
-                backgroundColor = SurfaceHigher,
+                backgroundColor = MaterialTheme.colorScheme.appColors.surfaceHigher,
                 iconTintColor = MaterialTheme.colorScheme.onSurface,
                 imageVector = Image,
                 modifier = Modifier
@@ -186,7 +183,7 @@ fun ScanningView(
                 Text(
                     text = stringResource(R.string.point_your_camera_at_a_qr_code),
                     style = MaterialTheme.typography.titleSmall,
-                    color = OnOverlay
+                    color = MaterialTheme.colorScheme.appColors.onOverlay
                 )
                 Spacer(Modifier.height(32.dp))
                 ScanFrame(

@@ -9,17 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.lihan.qrcraft.core.ui.theme.Link
-import com.lihan.qrcraft.core.ui.theme.LinkBG
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun TextLinkButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = Link,
-    background: Color = LinkBG
+    color: Color = MaterialTheme.colorScheme.appColors.link,
+    background: Color = MaterialTheme.colorScheme.appColors.linkBG
 ) {
     TextButton(
         modifier = modifier,

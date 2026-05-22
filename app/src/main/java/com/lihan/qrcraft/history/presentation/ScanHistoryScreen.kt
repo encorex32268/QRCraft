@@ -47,12 +47,8 @@ import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.history.presentation.components.QRCodeHistoryList
-import com.lihan.qrcraft.core.ui.theme.OnSurface
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.core.ui.theme.Outline
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -64,8 +60,6 @@ fun ScanHistoryScreenRoot(
     navigateToPreview: (Long,String) -> Unit,
     viewModel: ScanHistoryViewModel = koinViewModel()
 ){
-    SetIsStatusBarsContentLightColor(false)
-
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -127,7 +121,7 @@ private fun ScanHistoryScreen(
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             divider = {
-                HorizontalDivider(color = Outline)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
             },
             indicator = {
                 val tabPosition = it[pagerState.currentPage]
@@ -151,8 +145,8 @@ private fun ScanHistoryScreen(
                             pagerState.animateScrollToPage(Scanned)
                         }
                     },
-                    selectedContentColor = OnSurface,
-                    unselectedContentColor = OnSurfaceAlt,
+                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                    unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt,
                 ) {
                     Text(
                         modifier = Modifier.padding(vertical = 16.dp),
@@ -167,8 +161,8 @@ private fun ScanHistoryScreen(
                             pagerState.animateScrollToPage(Generated)
                         }
                     },
-                    selectedContentColor = OnSurface,
-                    unselectedContentColor = OnSurfaceAlt
+                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                    unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt
                 ) {
                     Text(
                         modifier = Modifier.padding(vertical = 16.dp),
@@ -215,7 +209,7 @@ private fun ScanHistoryScreen(
             onDismissRequest = {},
             dragHandle = null,
             scrimColor = Color.Black.copy(alpha = 0.32f),
-            containerColor = SurfaceHigher,
+            containerColor = MaterialTheme.colorScheme.appColors.surfaceHigher,
             shape = RoundedCornerShape(topStart = 16.dp , topEnd = 16.dp)
         ) {
             Column(

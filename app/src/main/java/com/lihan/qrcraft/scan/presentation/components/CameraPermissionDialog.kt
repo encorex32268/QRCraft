@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun CameraPermissionDialog(
@@ -68,7 +68,7 @@ fun CameraPermissionDialog(
                 Button(
                     modifier = Modifier.clip(RoundedCornerShape(100)),
                     onClick = onCloseApp,
-                    colors = ButtonDefaults.buttonColors(containerColor = SurfaceHigher)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.appColors.surfaceHigher)
                 ) {
                     Text(
                         text = stringResource(R.string.close_app),
@@ -79,7 +79,7 @@ fun CameraPermissionDialog(
                 Button(
                     modifier = Modifier.clip(RoundedCornerShape(100)),
                     onClick = onGrantAccess,
-                    colors = ButtonDefaults.buttonColors(containerColor = SurfaceHigher)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.appColors.surfaceHigher)
                 ) {
                     Text(
                         text = stringResource(R.string.grant_access),

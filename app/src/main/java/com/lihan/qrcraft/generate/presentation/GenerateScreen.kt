@@ -3,6 +3,7 @@
 package com.lihan.qrcraft.generate.presentation
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,6 @@ import com.lihan.qrcraft.generate.presentation.components.GenerateTypeCard
 import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
@@ -41,13 +41,9 @@ fun GenerateScreen(
     onItemClick: (QRCodeTypeUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    SetIsStatusBarsContentLightColor(false)
-
     val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
 
-   val items = remember {
-       QRCodeType.entries.map { it.toQRCodeTypeUi() }
-   }
+   val items = QRCodeType.entries.map { it.toQRCodeTypeUi() }
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -89,7 +85,9 @@ fun GenerateScreen(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun GenerateScreenPreview() {
     QRCraftTheme {

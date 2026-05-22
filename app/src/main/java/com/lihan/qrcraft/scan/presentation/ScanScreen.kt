@@ -55,11 +55,8 @@ import com.lihan.qrcraft.core.presentation.util.openAppSettings
 import com.lihan.qrcraft.scan.presentation.components.CameraPermissionDialog
 import com.lihan.qrcraft.scan.presentation.components.NoQRCodeFoundDialog
 import com.lihan.qrcraft.scan.presentation.components.ScanningView
-import com.lihan.qrcraft.core.ui.theme.OnOverlay
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.core.ui.theme.Success
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,8 +66,6 @@ fun ScanScreenRoot(
     closeApp: () -> Unit,
     viewModel: ScanViewModel = koinViewModel()
 ){
-    SetIsStatusBarsContentLightColor(true)
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val scanResultScreenTitle = stringResource(R.string.scan_result)
@@ -158,7 +153,7 @@ fun ScanScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = OnSurfaceAlt,
+        containerColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = {
             SnackbarHost(
@@ -169,7 +164,7 @@ fun ScanScreen(
                             .navigationBarsPadding()
                             .padding(bottom = 80.dp),
                         text = it.visuals.message,
-                        containerColor = Success,
+                        containerColor = MaterialTheme.colorScheme.appColors.success,
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Check,
@@ -224,14 +219,14 @@ fun ScanScreen(
                     ){
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = OnOverlay,
+                            color = MaterialTheme.colorScheme.appColors.onOverlay,
                             strokeWidth = 4.dp
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = stringResource(R.string.loading),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = OnOverlay
+                            color = MaterialTheme.colorScheme.appColors.onOverlay
                         )
                     }
                 }

@@ -33,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -57,17 +59,12 @@ import com.lihan.qrcraft.core.presentation.util.openBrowser
 import com.lihan.qrcraft.core.presentation.util.openCallPhone
 import com.lihan.qrcraft.core.presentation.util.openMapOrBrowser
 import com.lihan.qrcraft.core.presentation.util.openWifiSettings
-import com.lihan.qrcraft.core.ui.theme.Contact
-import com.lihan.qrcraft.core.ui.theme.ContactBG
-import com.lihan.qrcraft.core.ui.theme.Geo
-import com.lihan.qrcraft.core.ui.theme.GeoBG
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.core.ui.theme.Phone
-import com.lihan.qrcraft.core.ui.theme.PhoneBG
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
-import com.lihan.qrcraft.core.ui.theme.WiFi
-import com.lihan.qrcraft.core.ui.theme.WiFiBG
+import com.lihan.qrcraft.core.ui.theme.appColors
+import io.github.alexzhirkevich.qrose.options.QrBackground
+import io.github.alexzhirkevich.qrose.options.QrBrush
+import io.github.alexzhirkevich.qrose.options.QrColors
+import io.github.alexzhirkevich.qrose.options.solid
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 
 @Composable
@@ -79,8 +76,10 @@ fun QRCodePreviewCard(
     onShare: () -> Unit,
     onCopy:() -> Unit,
     onSave:() -> Unit,
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    qrCodeBackground: Color = MaterialTheme.colorScheme.surface,
+    qrCodeColor: Color = MaterialTheme.colorScheme.onSurface
+    ) {
     val context = LocalContext.current
 
     val qrCodeType = remember(type) {
@@ -172,8 +171,8 @@ fun QRCodePreviewCard(
                         TextLinkButton(
                             text = content,
                             onClick = { context.openCallPhone(phoneNumber) },
-                            color = Phone,
-                            background = PhoneBG
+                            color = MaterialTheme.colorScheme.appColors.phone,
+                            background = MaterialTheme.colorScheme.appColors.phoneBG
                         )
                     }
                     QRCodeType.Geolocation -> {
@@ -182,15 +181,15 @@ fun QRCodePreviewCard(
                         TextLinkButton(
                             text = content,
                             onClick = { context.openMapOrBrowser(lat,lng) },
-                            color = Geo,
-                            background = GeoBG,
+                            color = MaterialTheme.colorScheme.appColors.geo,
+                            background = MaterialTheme.colorScheme.appColors.geoBG,
                         )
                     }
                     QRCodeType.WiFi -> {
                         TextLinkButton(
                             text = content,
-                            color = WiFi,
-                            background = WiFiBG,
+                            color = MaterialTheme.colorScheme.appColors.wifi,
+                            background = MaterialTheme.colorScheme.appColors.wifiBG,
                             onClick = {
                                 onCopy()
                                 context.openWifiSettings()
@@ -203,8 +202,8 @@ fun QRCodePreviewCard(
                         val phoneNumber = content.split("\n").getOrNull(2)?:"phoneNumber"
                         TextLinkButton(
                             text = content,
-                            color = Contact,
-                            background = ContactBG,
+                            color = MaterialTheme.colorScheme.appColors.contact,
+                            background = MaterialTheme.colorScheme.appColors.contactBG,
                             onClick = {
                                 context.openAddContact(
                                     name = name,
@@ -239,7 +238,7 @@ fun QRCodePreviewCard(
                                     },
                                 text = stringResource(R.string.show_more),
                                 style = MaterialTheme.typography.labelLarge,
-                                color = OnSurfaceAlt
+                                color = MaterialTheme.colorScheme.appColors.onSurfaceAlt
                             )
                         }
                     }
@@ -252,14 +251,14 @@ fun QRCodePreviewCard(
                 ) {
                     CircleIcon(
                         iconTintColor = MaterialTheme.colorScheme.onSurface,
-                        backgroundColor = SurfaceHigher,
+                        backgroundColor = MaterialTheme.colorScheme.appColors.surfaceHigher,
                         imageVector = Share,
                         onClick = onShare,
                         size = 44.dp
                     )
                     CircleIcon(
                         iconTintColor = MaterialTheme.colorScheme.onSurface,
-                        backgroundColor = SurfaceHigher,
+                        backgroundColor = MaterialTheme.colorScheme.appColors.surfaceHigher,
                         imageVector = Copy,
                         onClick = onCopy,
                         size = 44.dp
@@ -275,7 +274,7 @@ fun QRCodePreviewCard(
                             )
                         },
                         text = stringResource(R.string.save),
-                        containerColor = SurfaceHigher,
+                        containerColor = MaterialTheme.colorScheme.appColors.surfaceHigher,
                         onClick = onSave
                     )
                 }
@@ -283,14 +282,24 @@ fun QRCodePreviewCard(
         }
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = SurfaceHigher,
+            color = MaterialTheme.colorScheme.appColors.surfaceHigher,
             modifier = Modifier
                 .size(160.dp),
             shadowElevation = 4.dp
         ){
             Image(
                 modifier = Modifier.fillMaxSize().padding(8.dp),
-                painter = rememberQrCodePainter(content),
+                painter = rememberQrCodePainter(
+                    data = content,
+                    background = QrBackground(fill = SolidColor(qrCodeBackground)),
+                    colors = QrColors(
+                        dark = QrBrush.solid(qrCodeColor),
+                        light = QrBrush.solid(qrCodeBackground),
+                        frame =  QrBrush.solid(qrCodeColor),
+                        ball = QrBrush.solid(qrCodeColor),
+
+                    )
+                ),
                 contentDescription = null
             )
         }

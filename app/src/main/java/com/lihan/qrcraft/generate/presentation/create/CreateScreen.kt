@@ -41,10 +41,8 @@ import com.lihan.qrcraft.core.presentation.ArrowLeft
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.generate.presentation.components.CreateQRTextField
-import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -53,8 +51,6 @@ fun CreateScreenRoot(
     onBack: () -> Unit,
     viewModel: CreateViewModel = koinViewModel()
 ){
-    SetIsStatusBarsContentLightColor(false)
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val screenTitle = stringResource(R.string.preview)
@@ -127,7 +123,7 @@ fun CreateScreen(
                 .widthIn(max = 480.dp)
                 .fillMaxWidth()
                 .padding(16.dp),
-            color = SurfaceHigher
+            color = MaterialTheme.colorScheme.appColors.surfaceHigher
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -246,7 +242,7 @@ fun CreateScreen(
                         onAction(CreateAction.GenerateButtonClick)
                     },
                     enabled = state.generateButtonEnabled,
-                    containerColor = Primary
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             }
         }

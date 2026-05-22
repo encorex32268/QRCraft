@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -180,7 +180,7 @@ fun EmptyView(
         Text(
             text = text,
             style = MaterialTheme.typography.labelLarge,
-            color = OnSurfaceAlt
+            color = MaterialTheme.colorScheme.appColors.onSurfaceAlt
         )
     }
 }

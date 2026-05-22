@@ -2,6 +2,7 @@
 
 package com.lihan.qrcraft.core.presentation.screens.preview
 
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -44,10 +46,8 @@ import com.lihan.qrcraft.core.presentation.design_system.QRCraftSnackbar
 import com.lihan.qrcraft.core.presentation.screens.preview.components.QRCodePreviewCard
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
-import com.lihan.qrcraft.core.ui.theme.OnOverlay
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.core.ui.theme.Success
+import com.lihan.qrcraft.core.ui.theme.appColors
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -57,8 +57,6 @@ fun PreviewScreenRoot(
     onBack: () -> Unit,
     viewModel: PreviewViewModel = koinViewModel()
 ){
-    SetIsStatusBarsContentLightColor(true)
-
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
@@ -105,7 +103,8 @@ private fun PreviewScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0),
-        containerColor = MaterialTheme.colorScheme.onSurface,
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarState,
@@ -113,7 +112,7 @@ private fun PreviewScreen(
                     QRCraftSnackbar(
                         modifier = Modifier.navigationBarsPadding().padding(bottom = 16.dp),
                         text = it.visuals.message,
-                        containerColor = Success,
+                        containerColor = MaterialTheme.colorScheme.appColors.success,
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Check,
@@ -134,7 +133,7 @@ private fun PreviewScreen(
                     Text(
                         text = state.screenTitle,
                         style = MaterialTheme.typography.titleMedium,
-                        color = OnOverlay
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -146,7 +145,7 @@ private fun PreviewScreen(
                         Icon(
                             imageVector = ArrowLeft,
                             contentDescription = null,
-                            tint = OnOverlay
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -164,7 +163,7 @@ private fun PreviewScreen(
                                 Star
                             },
                             contentDescription = null,
-                            tint = OnOverlay
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -201,12 +200,17 @@ private fun PreviewScreen(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun PreviewScreenPreview() {
     QRCraftTheme {
         PreviewScreen(
-            state = PreviewState(),
+            state = PreviewState(
+                title = TextFieldState("test"),
+                screenTitle = "Test"
+            ),
             onAction = {},
             snackbarState = remember { SnackbarHostState() }
         )

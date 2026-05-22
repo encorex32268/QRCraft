@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -18,12 +19,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lihan.qrcraft.core.ui.theme.Primary
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 
 @Composable
 fun ScanFrame(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pathColor: Color = MaterialTheme.colorScheme.primary
 ) {
 
     val density = LocalDensity.current
@@ -42,7 +43,8 @@ fun ScanFrame(
         drawQRCodeFrame(
             length = length,
             cornerRadiusPx = cornerRadiusPx,
-            borderStrokeWidthPx = borderStrokeWidthPx
+            borderStrokeWidthPx = borderStrokeWidthPx,
+            pathColor = pathColor
         )
     }
 
@@ -53,7 +55,8 @@ fun ScanFrame(
 fun DrawScope.drawQRCodeFrame(
     length: Float,
     cornerRadiusPx: Float,
-    borderStrokeWidthPx: Float
+    borderStrokeWidthPx: Float,
+    pathColor: Color
 ){
     val path = Path().apply {
         moveTo(x = 0f, y = length)
@@ -130,7 +133,7 @@ fun DrawScope.drawQRCodeFrame(
 
     drawPath(
         path = path,
-        color = Primary,
+        color = pathColor,
         style = Stroke(
             width = borderStrokeWidthPx
         )

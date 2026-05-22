@@ -22,9 +22,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.core.ui.theme.OnSurface
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.Success
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun QRCraftSnackbar(
@@ -64,12 +63,12 @@ private fun QRCraftSnackbarPreview() {
         QRCraftSnackbar(
             modifier = Modifier.fillMaxWidth(),
             text = "Action",
-            containerColor = Success,
+            containerColor = MaterialTheme.colorScheme.appColors.success,
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.heart),
                     contentDescription = null,
-                    tint = OnSurface
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         )

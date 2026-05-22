@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,10 +25,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.lihan.qrcraft.core.presentation.Scan
 import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
-import com.lihan.qrcraft.core.ui.theme.LinkBG
-import com.lihan.qrcraft.core.ui.theme.Primary
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun BottomNavigation(
@@ -42,7 +41,10 @@ fun BottomNavigation(
     ){
         Row(
             modifier = Modifier
-                .background(SurfaceHigher,RoundedCornerShape(100))
+                .background(
+                    color = MaterialTheme.colorScheme.appColors.surfaceHigher,
+                    shape = RoundedCornerShape(100)
+                )
                 .clip(RoundedCornerShape(100))
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -57,13 +59,14 @@ fun BottomNavigation(
                         .clickable{
                             onItemClick(item)
                         }
-                        .background(color = if (isSelected) LinkBG else Color.Transparent),
+                        .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent),
                     contentAlignment = Alignment.Center
                 ){
                     Icon(
                         modifier = Modifier.size(22.dp),
                         imageVector = ImageVector.vectorResource(item.iconId),
-                        contentDescription = item.name
+                        contentDescription = item.name,
+                        tint = MaterialTheme.colorScheme.surface
                     )
                 }
             }
@@ -72,7 +75,7 @@ fun BottomNavigation(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(64.dp)
-                .background(color = Primary)
+                .background(color = MaterialTheme.colorScheme.primary)
                 .padding(horizontal = 4.dp)
                 .clickable(
                     indication = null,

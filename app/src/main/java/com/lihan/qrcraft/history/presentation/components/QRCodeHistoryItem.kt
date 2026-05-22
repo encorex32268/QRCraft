@@ -34,10 +34,8 @@ import com.lihan.qrcraft.core.presentation.StarFill
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftIconButton
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceDisabled
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun QRCodeHistoryItem(
@@ -51,9 +49,7 @@ fun QRCodeHistoryItem(
     modifier: Modifier = Modifier,
     title: String?=null
 ) {
-    val qrCodeTypeUi = remember(type){
-        QRCodeType.getQRCodeType(type).toQRCodeTypeUi()
-    }
+    val qrCodeTypeUi = QRCodeType.getQRCodeType(type).toQRCodeTypeUi()
 
     Surface(
         modifier = modifier
@@ -62,7 +58,7 @@ fun QRCodeHistoryItem(
                 onClick = onItemClick,
                 onLongClick = onItemLongClick
             ),
-        color = SurfaceHigher
+        color = MaterialTheme.colorScheme.appColors.surfaceHigher
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -101,13 +97,13 @@ fun QRCodeHistoryItem(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = OnSurfaceAlt
+                        color = MaterialTheme.colorScheme.appColors.onSurfaceAlt
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
                         text = timestamp.formatTimeString(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = OnSurfaceDisabled
+                        color = MaterialTheme.colorScheme.appColors.onSurfaceDisabled
                     )
                 }
             }
@@ -126,7 +122,7 @@ fun QRCodeHistoryItem(
                 tintColor = if (isFavorite){
                     MaterialTheme.colorScheme.onSurface
                 }else{
-                    OnSurfaceDisabled
+                    MaterialTheme.colorScheme.appColors.onSurfaceDisabled
                 }
             )
         }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,10 +25,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.lihan.qrcraft.core.presentation.Scan
 import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
-import com.lihan.qrcraft.core.ui.theme.LinkBG
-import com.lihan.qrcraft.core.ui.theme.Primary
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun AdaptiveNavigationRail(
@@ -42,7 +41,7 @@ fun AdaptiveNavigationRail(
     ) {
         Column(
             modifier = Modifier
-                .background(SurfaceHigher, RoundedCornerShape(100))
+                .background(MaterialTheme.colorScheme.appColors.surfaceHigher, RoundedCornerShape(100))
                 .clip(RoundedCornerShape(100))
                 .padding(vertical = 12.dp, horizontal = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +54,7 @@ fun AdaptiveNavigationRail(
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(64.dp)
-                            .background(color = Primary)
+                            .background(color = MaterialTheme.colorScheme.primary)
                             .clickable(
                                 indication = null,
                                 interactionSource = null
@@ -78,7 +77,7 @@ fun AdaptiveNavigationRail(
                             .clickable {
                                 onItemClick(item)
                             }
-                            .background(color = if (isSelected) LinkBG else Color.Transparent),
+                            .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(

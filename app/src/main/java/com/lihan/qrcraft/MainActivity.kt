@@ -31,10 +31,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import com.lihan.qrcraft.core.presentation.components.AdaptiveNavigationRail
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 
 class MainActivity : ComponentActivity() {
@@ -51,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
                 if (isWideScreen) {
                     Row(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.appColors.surfaceHigher)
                     ) {
                         if (showNav) {
                             AdaptiveNavigationRail(

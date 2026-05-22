@@ -16,9 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceDisabled
-import com.lihan.qrcraft.core.ui.theme.Primary
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun QRCraftIconButton(
@@ -27,7 +26,7 @@ fun QRCraftIconButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     tintColor: Color = MaterialTheme.colorScheme.onSurface,
-    containerColor: Color = Primary,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
     iconSize: Dp = 16.dp,
 ) {
     IconButton(
@@ -38,7 +37,7 @@ fun QRCraftIconButton(
             containerColor = containerColor,
             disabledContainerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
-            disabledContentColor = OnSurfaceDisabled
+            disabledContentColor = MaterialTheme.colorScheme.appColors.onSurfaceDisabled
         )
     ) {
         Icon(

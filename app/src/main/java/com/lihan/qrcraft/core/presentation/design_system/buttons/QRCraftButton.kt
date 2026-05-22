@@ -20,9 +20,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceDisabled
-import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.PrimaryButtonText
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun QRCraftButton(
@@ -32,7 +32,7 @@ fun QRCraftButton(
     text: String?=null,
     leadingIcon: @Composable (()->Unit)?=null,
     trailingIcon: @Composable (()->Unit)?=null,
-    textColor: Color = MaterialTheme.colorScheme.onSurface,
+    textColor: Color = PrimaryButtonText,
     containerColor: Color = Color.Transparent
 ) {
     Button(
@@ -41,12 +41,12 @@ fun QRCraftButton(
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            disabledContainerColor = if (containerColor != Primary){
+            disabledContainerColor = if (containerColor != MaterialTheme.colorScheme.primary){
                 Color.Transparent
             }else{
                 MaterialTheme.colorScheme.surface
             },
-            disabledContentColor = OnSurfaceDisabled
+            disabledContentColor =  MaterialTheme.colorScheme.appColors.onSurfaceDisabled,
         )
     ) {
         Row(
@@ -65,7 +65,7 @@ fun QRCraftButton(
                     color = if (enabled){
                         textColor
                     }else{
-                        OnSurfaceDisabled
+                        MaterialTheme.colorScheme.appColors.onSurfaceDisabled
                     }
                 )
             }
@@ -91,7 +91,7 @@ private fun QRCraftButtonPreview() {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.scan),
             contentDescription = "Scan",
-            tint = OnSurfaceDisabled
+            tint = MaterialTheme.colorScheme.appColors.onSurfaceDisabled
         )
     }
     val qrCodeIconError = @Composable {
@@ -108,14 +108,14 @@ private fun QRCraftButtonPreview() {
             QRCraftButton(
                 text = "Button",
                 onClick = {},
-                containerColor = Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 leadingIcon = qrCodeIconEnable,
                 trailingIcon = qrCodeIconEnable
             )
             QRCraftButton(
                 text = "Button",
                 onClick = {},
-                containerColor = Primary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 leadingIcon = qrCodeIconDisable,
                 trailingIcon = qrCodeIconDisable,
                 enabled = false
@@ -144,7 +144,7 @@ private fun QRCraftButtonPreview() {
                 trailingIcon = qrCodeIconError,
             )
         }
-
     }
-
 }
+
+  

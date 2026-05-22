@@ -18,9 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lihan.qrcraft.core.ui.theme.OnSurface
-import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun CreateQRTextField(
@@ -44,13 +43,13 @@ fun CreateQRTextField(
                     Text(
                         text = placeholder,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = OnSurfaceAlt
+                        color = MaterialTheme.colorScheme.appColors.onSurfaceAlt
                     )
                 }
                 innerField()
             }
         },
-        textStyle = MaterialTheme.typography.bodyLarge.copy(color = OnSurface),
+        textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
         keyboardOptions = keyboardOptions,
         onKeyboardAction = keyboardActionHandler,
         modifier = modifier

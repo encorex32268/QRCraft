@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.core.presentation.Text
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
-import com.lihan.qrcraft.core.ui.theme.TextBG
+import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun GenerateTypeCard(
@@ -35,7 +34,7 @@ fun GenerateTypeCard(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = SurfaceHigher,
+        color = MaterialTheme.colorScheme.appColors.surfaceHigher,
         onClick = onItemClick
     ) {
         Column(
@@ -73,8 +72,8 @@ private fun GenerateTypeCardPreview() {
         GenerateTypeCard(
             text = "Text",
             imageVector = Text,
-            iconTintColor = com.lihan.qrcraft.core.ui.theme.Text,
-            iconBackgroundColor = TextBG,
+            iconTintColor = MaterialTheme.colorScheme.appColors.text,
+            iconBackgroundColor = MaterialTheme.colorScheme.appColors.textBG,
             onItemClick = {}
         )
     }

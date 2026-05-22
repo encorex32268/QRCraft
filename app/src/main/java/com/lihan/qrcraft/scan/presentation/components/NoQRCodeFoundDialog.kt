@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.presentation.AlertTriangle
+import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun NoQRCodeFoundDialog(
@@ -33,7 +33,7 @@ fun NoQRCodeFoundDialog(
         Column(
             modifier = modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(SurfaceHigher, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.appColors.surfaceHigher, RoundedCornerShape(12.dp))
                 .fillMaxWidth()
                 .padding(vertical = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
