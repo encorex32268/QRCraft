@@ -41,11 +41,11 @@ import com.lihan.qrcraft.core.presentation.FlashOff
 import com.lihan.qrcraft.core.presentation.Image
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.scan.presentation.BarcodeAnalyzer
-import com.lihan.qrcraft.ui.theme.OnOverlay
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.Primary
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.OnOverlay
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun ScanningView(

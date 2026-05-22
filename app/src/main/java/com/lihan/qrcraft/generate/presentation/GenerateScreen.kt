@@ -32,8 +32,8 @@ import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.generate.presentation.components.GenerateTypeCard
 import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable

@@ -22,9 +22,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.ui.theme.OnSurface
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.Success
+import com.lihan.qrcraft.core.ui.theme.OnSurface
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.Success
 
 @Composable
 fun QRCraftSnackbar(

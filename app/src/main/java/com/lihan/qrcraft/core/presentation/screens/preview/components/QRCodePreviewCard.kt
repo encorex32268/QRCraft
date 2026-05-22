@@ -1,8 +1,5 @@
 package com.lihan.qrcraft.core.presentation.screens.preview.components
 
-import android.content.Intent
-import android.os.Build
-import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,19 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.presentation.Copy
@@ -58,24 +51,23 @@ import com.lihan.qrcraft.core.presentation.Share
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.core.presentation.components.TextLinkButton
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
-import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftIconButton
 import com.lihan.qrcraft.core.presentation.util.asString
 import com.lihan.qrcraft.core.presentation.util.openAddContact
 import com.lihan.qrcraft.core.presentation.util.openBrowser
 import com.lihan.qrcraft.core.presentation.util.openCallPhone
 import com.lihan.qrcraft.core.presentation.util.openMapOrBrowser
 import com.lihan.qrcraft.core.presentation.util.openWifiSettings
-import com.lihan.qrcraft.ui.theme.Contact
-import com.lihan.qrcraft.ui.theme.ContactBG
-import com.lihan.qrcraft.ui.theme.Geo
-import com.lihan.qrcraft.ui.theme.GeoBG
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.Phone
-import com.lihan.qrcraft.ui.theme.PhoneBG
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
-import com.lihan.qrcraft.ui.theme.WiFi
-import com.lihan.qrcraft.ui.theme.WiFiBG
+import com.lihan.qrcraft.core.ui.theme.Contact
+import com.lihan.qrcraft.core.ui.theme.ContactBG
+import com.lihan.qrcraft.core.ui.theme.Geo
+import com.lihan.qrcraft.core.ui.theme.GeoBG
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.Phone
+import com.lihan.qrcraft.core.ui.theme.PhoneBG
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.WiFi
+import com.lihan.qrcraft.core.ui.theme.WiFiBG
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 
 @Composable

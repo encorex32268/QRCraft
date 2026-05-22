@@ -34,10 +34,10 @@ import com.lihan.qrcraft.core.presentation.StarFill
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftIconButton
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.OnSurfaceDisabled
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceDisabled
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun QRCodeHistoryItem(

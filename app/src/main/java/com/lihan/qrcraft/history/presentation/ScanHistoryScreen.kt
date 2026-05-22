@@ -47,12 +47,12 @@ import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.history.presentation.components.QRCodeHistoryList
-import com.lihan.qrcraft.ui.theme.OnSurface
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.Outline
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.OnSurface
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.Outline
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 

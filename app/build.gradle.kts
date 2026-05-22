@@ -72,6 +72,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.assertk)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockk)
 
     implementation(libs.google.accompanist.permissions)
     implementation(libs.navigation.compose)

@@ -22,21 +22,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import com.lihan.qrcraft.core.presentation.model.BottomItem
-import com.lihan.qrcraft.core.domain.Route
-import com.lihan.qrcraft.core.presentation.model.bottomItems
 import com.lihan.qrcraft.core.presentation.Scan
-import com.lihan.qrcraft.ui.theme.LinkBG
-import com.lihan.qrcraft.ui.theme.Primary
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
+import com.lihan.qrcraft.core.ui.theme.LinkBG
+import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 
 @Composable
 fun BottomNavigation(
-    currentRoute: Route,
+    currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
-    items: List<BottomItem> = bottomItems,
-    onItemClick: (BottomItem) -> Unit,
+    items: List<TopLevelDestination> = TopLevelDestination.entries,
+    onItemClick: (TopLevelDestination) -> Unit,
 ) {
     Box(
         modifier = modifier,
@@ -51,7 +49,7 @@ fun BottomNavigation(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items.forEach { item ->
-                val isSelected = currentRoute == item.route
+                val isSelected = currentDestination?.hasRoute(item.routeClass) == true
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
@@ -64,7 +62,7 @@ fun BottomNavigation(
                 ){
                     Icon(
                         modifier = Modifier.size(22.dp),
-                        imageVector = ImageVector.vectorResource(item.resId),
+                        imageVector = ImageVector.vectorResource(item.iconId),
                         contentDescription = item.name
                     )
                 }
@@ -80,10 +78,7 @@ fun BottomNavigation(
                     indication = null,
                     interactionSource = null
                 ){
-                    val scan = items.find { it.route == Route.Scan }
-                    scan?.let {
-                        onItemClick(it)
-                    }
+                    onItemClick(TopLevelDestination.SCAN)
                 },
             contentAlignment = Alignment.Center
         ){
@@ -94,9 +89,6 @@ fun BottomNavigation(
             )
         }
     }
-
-
-
 }
 
 
@@ -107,7 +99,7 @@ private fun BottomNavigationPreview() {
         BottomNavigation(
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             onItemClick = {},
-            currentRoute = Route.Generate
+            currentDestination = null
         )
     }
 }

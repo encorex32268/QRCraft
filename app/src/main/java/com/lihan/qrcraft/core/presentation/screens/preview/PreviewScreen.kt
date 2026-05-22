@@ -44,10 +44,10 @@ import com.lihan.qrcraft.core.presentation.design_system.QRCraftSnackbar
 import com.lihan.qrcraft.core.presentation.screens.preview.components.QRCodePreviewCard
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
-import com.lihan.qrcraft.ui.theme.OnOverlay
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.ui.theme.Success
+import com.lihan.qrcraft.core.ui.theme.OnOverlay
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
+import com.lihan.qrcraft.core.ui.theme.Success
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -104,7 +104,7 @@ private fun PreviewScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets(),
+        contentWindowInsets = WindowInsets(0),
         containerColor = MaterialTheme.colorScheme.onSurface,
         snackbarHost = {
             SnackbarHost(

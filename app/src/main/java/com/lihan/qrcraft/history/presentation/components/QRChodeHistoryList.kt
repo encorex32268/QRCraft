@@ -1,6 +1,5 @@
 package com.lihan.qrcraft.history.presentation.components
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,11 +25,17 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.ui.platform.LocalConfiguration
 import com.lihan.qrcraft.R
 import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -48,58 +53,115 @@ fun QRCodeHistoryList(
             modifier = modifier.fillMaxSize()
         )
     } else {
-
-        val listState = rememberLazyListState()
+        val isWideScreen = LocalConfiguration.current.screenWidthDp >= 600
         val scope = rememberCoroutineScope()
 
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-                .drawWithContent {
-                    drawContent()
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            0f to Color.Black,
-                            0.75f to Color.Black,
-                            1f to Color.Transparent
-                        ),
-                        blendMode = BlendMode.DstIn)
-                },
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(bottom = 16.dp),
-
-        ) {
-            items(
-                items = items,
-                key = { it.id }
-            ) { item ->
-                QRCodeHistoryItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    type = item.type,
-                    content = item.content,
-                    timestamp = item.createdAt,
-                    title = item.title,
-                    isFavorite = item.isFavorite,
-                    onItemLongClick = { onItemLongClick(item.id)},
-                    onItemClick = { onItemClick(item.id) },
-                    onFavoriteClick = {
-                        onFavoriteClick(
-                            item.id,
-                            item.isFavorite
+        if (isWideScreen) {
+            val gridState = rememberLazyGridState()
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 340.dp),
+                modifier = modifier
+                    .fillMaxSize()
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                0f to Color.Black,
+                                0.75f to Color.Black,
+                                1f to Color.Transparent
+                            ),
+                            blendMode = BlendMode.DstIn
                         )
-                        scope.launch {
-                            listState.animateScrollToItem(0)
+                    },
+                state = gridState,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(bottom = 16.dp),
+            ) {
+                items(
+                    items = items,
+                    key = { it.id }
+                ) { item ->
+                    QRCodeHistoryItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        type = item.type,
+                        content = item.content,
+                        timestamp = item.createdAt,
+                        title = item.title,
+                        isFavorite = item.isFavorite,
+                        onItemLongClick = { onItemLongClick(item.id) },
+                        onItemClick = { onItemClick(item.id) },
+                        onFavoriteClick = {
+                            onFavoriteClick(
+                                item.id,
+                                item.isFavorite
+                            )
+                            scope.launch {
+                                gridState.animateScrollToItem(0)
+                            }
                         }
+                    )
+                }
+                if (items.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.height(90.dp))
                     }
-                )
+                }
             }
-            if (items.isNotEmpty()){
-                item {
-                    Spacer(Modifier.height(90.dp))
+        } else {
+            val listState = rememberLazyListState()
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                0f to Color.Black,
+                                0.75f to Color.Black,
+                                1f to Color.Transparent
+                            ),
+                            blendMode = BlendMode.DstIn
+                        )
+                    },
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(bottom = 16.dp),
+            ) {
+                items(
+                    items = items,
+                    key = { it.id }
+                ) { item ->
+                    QRCodeHistoryItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        type = item.type,
+                        content = item.content,
+                        timestamp = item.createdAt,
+                        title = item.title,
+                        isFavorite = item.isFavorite,
+                        onItemLongClick = { onItemLongClick(item.id) },
+                        onItemClick = { onItemClick(item.id) },
+                        onFavoriteClick = {
+                            onFavoriteClick(
+                                item.id,
+                                item.isFavorite
+                            )
+                            scope.launch {
+                                listState.animateScrollToItem(0)
+                            }
+                        }
+                    )
+                }
+                if (items.isNotEmpty()) {
+                    item {
+                        Spacer(Modifier.height(90.dp))
+                    }
                 }
             }
         }

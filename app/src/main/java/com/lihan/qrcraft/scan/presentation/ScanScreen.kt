@@ -55,11 +55,11 @@ import com.lihan.qrcraft.core.presentation.util.openAppSettings
 import com.lihan.qrcraft.scan.presentation.components.CameraPermissionDialog
 import com.lihan.qrcraft.scan.presentation.components.NoQRCodeFoundDialog
 import com.lihan.qrcraft.scan.presentation.components.ScanningView
-import com.lihan.qrcraft.ui.theme.OnOverlay
-import com.lihan.qrcraft.ui.theme.OnSurfaceAlt
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.ui.theme.Success
+import com.lihan.qrcraft.core.ui.theme.OnOverlay
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceAlt
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
+import com.lihan.qrcraft.core.ui.theme.Success
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

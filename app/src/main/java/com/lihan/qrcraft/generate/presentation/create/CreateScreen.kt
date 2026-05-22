@@ -41,10 +41,10 @@ import com.lihan.qrcraft.core.presentation.ArrowLeft
 import com.lihan.qrcraft.core.presentation.design_system.buttons.QRCraftButton
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.generate.presentation.components.CreateQRTextField
-import com.lihan.qrcraft.ui.theme.Primary
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SetIsStatusBarsContentLightColor
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SetIsStatusBarsContentLightColor
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

@@ -18,9 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.core.presentation.Text
 import com.lihan.qrcraft.core.presentation.components.CircleIcon
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
-import com.lihan.qrcraft.ui.theme.SurfaceHigher
-import com.lihan.qrcraft.ui.theme.TextBG
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.SurfaceHigher
+import com.lihan.qrcraft.core.ui.theme.TextBG
 
 @Composable
 fun GenerateTypeCard(
@@ -73,7 +73,7 @@ private fun GenerateTypeCardPreview() {
         GenerateTypeCard(
             text = "Text",
             imageVector = Text,
-            iconTintColor = com.lihan.qrcraft.ui.theme.Text,
+            iconTintColor = com.lihan.qrcraft.core.ui.theme.Text,
             iconBackgroundColor = TextBG,
             onItemClick = {}
         )

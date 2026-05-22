@@ -20,9 +20,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lihan.qrcraft.R
-import com.lihan.qrcraft.ui.theme.OnSurfaceDisabled
-import com.lihan.qrcraft.ui.theme.Primary
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.OnSurfaceDisabled
+import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 
 @Composable
 fun QRCraftButton(

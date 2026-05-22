@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lihan.qrcraft.ui.theme.Primary
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.Primary
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 
 @Composable
 fun ScanFrame(

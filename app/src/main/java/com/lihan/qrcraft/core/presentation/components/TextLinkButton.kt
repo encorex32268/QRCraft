@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.lihan.qrcraft.ui.theme.Link
-import com.lihan.qrcraft.ui.theme.LinkBG
-import com.lihan.qrcraft.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.ui.theme.Link
+import com.lihan.qrcraft.core.ui.theme.LinkBG
+import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 
 @Composable
 fun TextLinkButton(

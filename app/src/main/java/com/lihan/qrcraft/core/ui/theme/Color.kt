@@ -1,4 +1,4 @@
-package com.lihan.qrcraft.ui.theme
+package com.lihan.qrcraft.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
