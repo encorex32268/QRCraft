@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
@@ -30,7 +31,7 @@ import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun BottomNavigation(
-    currentDestination: NavDestination?,
+    selectedDestination: TopLevelDestination?,
     modifier: Modifier = Modifier,
     items: List<TopLevelDestination> = TopLevelDestination.entries,
     onItemClick: (TopLevelDestination) -> Unit,
@@ -51,23 +52,27 @@ fun BottomNavigation(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items.forEach { item ->
-                val isSelected = currentDestination?.hasRoute(item.routeClass) == true
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(44.dp)
-                        .clickable{
-                            onItemClick(item)
-                        }
-                        .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent),
-                    contentAlignment = Alignment.Center
-                ){
-                    Icon(
-                        modifier = Modifier.size(22.dp),
-                        imageVector = ImageVector.vectorResource(item.iconId),
-                        contentDescription = item.name,
-                        tint = MaterialTheme.colorScheme.surface
-                    )
+                if (item == TopLevelDestination.SCAN) {
+                    Spacer(modifier = Modifier.size(44.dp))
+                } else {
+                    val isSelected = selectedDestination == item
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(44.dp)
+                            .clickable{
+                                onItemClick(item)
+                            }
+                            .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent),
+                        contentAlignment = Alignment.Center
+                    ){
+                        Icon(
+                            modifier = Modifier.size(22.dp),
+                            imageVector = ImageVector.vectorResource(item.iconId),
+                            contentDescription = item.name,
+                            tint = MaterialTheme.colorScheme.surface
+                        )
+                    }
                 }
             }
         }
@@ -94,6 +99,21 @@ fun BottomNavigation(
     }
 }
 
+@Composable
+fun BottomNavigation(
+    currentDestination: NavDestination?,
+    modifier: Modifier = Modifier,
+    items: List<TopLevelDestination> = TopLevelDestination.entries,
+    onItemClick: (TopLevelDestination) -> Unit,
+) {
+    val selectedDestination = items.firstOrNull { currentDestination?.hasRoute(it.routeClass) == true }
+    BottomNavigation(
+        selectedDestination = selectedDestination,
+        modifier = modifier,
+        items = items,
+        onItemClick = onItemClick
+    )
+}
 
 @Preview(showSystemUi = true)
 @Composable
@@ -102,7 +122,7 @@ private fun BottomNavigationPreview() {
         BottomNavigation(
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             onItemClick = {},
-            currentDestination = null
+            selectedDestination = TopLevelDestination.SCAN
         )
     }
 }

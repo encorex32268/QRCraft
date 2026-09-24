@@ -30,7 +30,7 @@ import com.lihan.qrcraft.core.ui.theme.appColors
 
 @Composable
 fun AdaptiveNavigationRail(
-    currentDestination: NavDestination?,
+    selectedDestination: TopLevelDestination?,
     modifier: Modifier = Modifier,
     items: List<TopLevelDestination> = TopLevelDestination.entries,
     onItemClick: (TopLevelDestination) -> Unit,
@@ -48,7 +48,7 @@ fun AdaptiveNavigationRail(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items.forEach { item ->
-                val isSelected = currentDestination?.hasRoute(item.routeClass) == true
+                val isSelected = selectedDestination == item
                 if (item == TopLevelDestination.SCAN) {
                     Box(
                         modifier = Modifier
@@ -92,6 +92,22 @@ fun AdaptiveNavigationRail(
     }
 }
 
+@Composable
+fun AdaptiveNavigationRail(
+    currentDestination: NavDestination?,
+    modifier: Modifier = Modifier,
+    items: List<TopLevelDestination> = TopLevelDestination.entries,
+    onItemClick: (TopLevelDestination) -> Unit,
+) {
+    val selectedDestination = items.firstOrNull { currentDestination?.hasRoute(it.routeClass) == true }
+    AdaptiveNavigationRail(
+        selectedDestination = selectedDestination,
+        modifier = modifier,
+        items = items,
+        onItemClick = onItemClick
+    )
+}
+
 @Preview(showSystemUi = true, device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
 private fun AdaptiveNavigationRailPreview() {
@@ -104,7 +120,7 @@ private fun AdaptiveNavigationRailPreview() {
         ) {
             AdaptiveNavigationRail(
                 onItemClick = {},
-                currentDestination = null
+                selectedDestination = TopLevelDestination.SCAN
             )
         }
     }
