@@ -57,6 +57,8 @@ import com.lihan.qrcraft.scan.presentation.components.NoQRCodeFoundDialog
 import com.lihan.qrcraft.scan.presentation.components.ScanningView
 import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
+import com.lihan.qrcraft.core.presentation.components.MainAdaptiveLayout
+import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,6 +66,7 @@ import org.koin.androidx.compose.koinViewModel
 fun ScanScreenRoot(
     navigateToPreview: (Long,String) -> Unit,
     closeApp: () -> Unit,
+    onNavigateToDestination: (TopLevelDestination) -> Unit = {},
     viewModel: ScanViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -118,6 +121,7 @@ fun ScanScreenRoot(
             }
             viewModel.onAction(action)
         },
+        onNavigateToDestination = onNavigateToDestination,
         snackbarState = snackbarState,
         permissionState = permissionState
     )
@@ -132,7 +136,8 @@ fun ScanScreen(
     snackbarState: SnackbarHostState,
     permissionState: PermissionState,
     onAction: (ScanAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToDestination: (TopLevelDestination) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -150,9 +155,10 @@ fun ScanScreen(
         }
     }
 
-
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
+    MainAdaptiveLayout(
+        selectedDestination = TopLevelDestination.SCAN,
+        onNavigateToDestination = onNavigateToDestination,
+        floatingBottomBar = true,
         containerColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = {
@@ -175,8 +181,9 @@ fun ScanScreen(
                     )
                 }
             )
-        }
-    ) {it
+        },
+        modifier = modifier
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

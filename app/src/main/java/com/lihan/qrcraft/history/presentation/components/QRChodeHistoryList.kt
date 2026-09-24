@@ -107,7 +107,7 @@ fun QRCodeHistoryList(
                 }
                 if (items.isNotEmpty()) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Spacer(Modifier.height(90.dp))
+                        Spacer(Modifier.height(24.dp))
                     }
                 }
             }
@@ -160,7 +160,7 @@ fun QRCodeHistoryList(
                 }
                 if (items.isNotEmpty()) {
                     item {
-                        Spacer(Modifier.height(90.dp))
+                        Spacer(Modifier.height(24.dp))
                     }
                 }
             }

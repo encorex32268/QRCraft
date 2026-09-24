@@ -47,6 +47,8 @@ import com.lihan.qrcraft.core.presentation.model.QRCodeHistoryUi
 import com.lihan.qrcraft.core.presentation.util.ObserveAsEvents
 import com.lihan.qrcraft.core.presentation.util.openShareSheet
 import com.lihan.qrcraft.history.presentation.components.QRCodeHistoryList
+import com.lihan.qrcraft.core.presentation.components.MainAdaptiveLayout
+import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
 import com.lihan.qrcraft.core.ui.theme.appColors
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 import kotlinx.coroutines.launch
@@ -58,6 +60,7 @@ private const val Generated = 1
 @Composable
 fun ScanHistoryScreenRoot(
     navigateToPreview: (Long,String) -> Unit,
+    onNavigateToDestination: (TopLevelDestination) -> Unit = {},
     viewModel: ScanHistoryViewModel = koinViewModel()
 ){
     val context = LocalContext.current
@@ -83,7 +86,8 @@ fun ScanHistoryScreenRoot(
 
     ScanHistoryScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onNavigateToDestination = onNavigateToDestination
     )
 }
 
@@ -93,7 +97,8 @@ fun ScanHistoryScreenRoot(
 private fun ScanHistoryScreen(
     state: ScanHistoryState,
     onAction: (ScanHistoryAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToDestination: (TopLevelDestination) -> Unit = {}
 ) {
     val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
 
@@ -104,97 +109,103 @@ private fun ScanHistoryScreen(
         pageCount = { 2 }
     )
 
-    Column(
+    MainAdaptiveLayout(
+        selectedDestination = TopLevelDestination.HISTORY,
+        onNavigateToDestination = onNavigateToDestination,
         modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
     ) {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.scan_history),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        )
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            divider = {
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            },
-            indicator = {
-                val tabPosition = it[pagerState.currentPage]
-                SecondaryIndicator(
-                    modifier = Modifier
-                        .tabIndicatorOffset(tabPosition)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .wrapContentSize(Alignment.BottomCenter)
-                        .clip(RoundedCornerShape(100))
-                        .width(tabPosition.width),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    height = 2.dp
-                )
-            },
-            tabs = {
-                Tab(
-                    selected = pagerState.currentPage == Scanned,
-                    onClick = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(Scanned)
-                        }
-                    },
-                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt,
-                ) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        text = stringResource(R.string.scanned),
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                }
-                Tab(
-                    selected = pagerState.currentPage == Generated,
-                    onClick = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(Generated)
-                        }
-                    },
-                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt
-                ) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        text = stringResource(R.string.generated),
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                }
-            }
-        )
-        HorizontalPager(
-            state =  pagerState,
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-        ) { page ->
-
-            val displayItems = if (page == Scanned) state.scannedItems else state.generatedItems
-
-            QRCodeHistoryList(
-                items = displayItems,
-                onItemClick = {
-                    onAction(ScanHistoryAction.ItemClick(it))
-                },
-                onItemLongClick = {
-                    onAction(ScanHistoryAction.ItemLongClick(it))
-                },
-                onFavoriteClick = { id, isFavorite ->
-                    onAction(ScanHistoryAction.ItemFavoriteClick(id,isFavorite))
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.scan_history),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             )
-        }
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                divider = {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                },
+                indicator = {
+                    val tabPosition = it[pagerState.currentPage]
+                    SecondaryIndicator(
+                        modifier = Modifier
+                            .tabIndicatorOffset(tabPosition)
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .wrapContentSize(Alignment.BottomCenter)
+                            .clip(RoundedCornerShape(100))
+                            .width(tabPosition.width),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        height = 2.dp
+                    )
+                },
+                tabs = {
+                    Tab(
+                        selected = pagerState.currentPage == Scanned,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(Scanned)
+                            }
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt,
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(vertical = 16.dp),
+                            text = stringResource(R.string.scanned),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                    Tab(
+                        selected = pagerState.currentPage == Generated,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(Generated)
+                            }
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.appColors.onSurfaceAlt
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(vertical = 16.dp),
+                            text = stringResource(R.string.generated),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                }
+            )
+            HorizontalPager(
+                state =  pagerState,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+            ) { page ->
 
+                val displayItems = if (page == Scanned) state.scannedItems else state.generatedItems
+
+                QRCodeHistoryList(
+                    items = displayItems,
+                    onItemClick = {
+                        onAction(ScanHistoryAction.ItemClick(it))
+                    },
+                    onItemLongClick = {
+                        onAction(ScanHistoryAction.ItemLongClick(it))
+                    },
+                    onFavoriteClick = { id, isFavorite ->
+                        onAction(ScanHistoryAction.ItemFavoriteClick(id,isFavorite))
+                    }
+                )
+            }
+
+        }
     }
 
     if (state.isShowEditorBottomSheet){

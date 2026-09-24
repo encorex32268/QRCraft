@@ -33,55 +33,65 @@ import com.lihan.qrcraft.core.domain.QRCodeType
 import com.lihan.qrcraft.generate.presentation.components.GenerateTypeCard
 import com.lihan.qrcraft.generate.presentation.model.QRCodeTypeUi
 import com.lihan.qrcraft.generate.presentation.model.toQRCodeTypeUi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import com.lihan.qrcraft.core.presentation.components.MainAdaptiveLayout
+import com.lihan.qrcraft.core.presentation.navigation.TopLevelDestination
 import com.lihan.qrcraft.core.ui.theme.QRCraftTheme
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun GenerateScreen(
     onItemClick: (QRCodeTypeUi) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToDestination: (TopLevelDestination) -> Unit = {}
 ) {
     val isWideDevice = LocalConfiguration.current.screenWidthDp >= 600
 
-   val items = QRCodeType.entries.map { it.toQRCodeTypeUi() }
-    Column(
+    val items = QRCodeType.entries.map { it.toQRCodeTypeUi() }
+
+    MainAdaptiveLayout(
+        selectedDestination = TopLevelDestination.GENERATE,
+        onNavigateToDestination = onNavigateToDestination,
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.create_qr),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        )
-        Spacer(Modifier.height(16.dp))
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(if (isWideDevice) 3 else 2),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(items){ qrCodeTypeUi ->
-                GenerateTypeCard(
-                    text = stringResource(qrCodeTypeUi.stringResId),
-                    imageVector = ImageVector.vectorResource(qrCodeTypeUi.iconResId),
-                    iconTintColor = qrCodeTypeUi.iconTintColor,
-                    iconBackgroundColor = qrCodeTypeUi.iconBackgroundColor,
-                    onItemClick = {
-                        onItemClick(qrCodeTypeUi)
-                    }
-                )
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.create_qr),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(Modifier.height(16.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(if (isWideDevice) 3 else 2),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(items){ qrCodeTypeUi ->
+                    GenerateTypeCard(
+                        text = stringResource(qrCodeTypeUi.stringResId),
+                        imageVector = ImageVector.vectorResource(qrCodeTypeUi.iconResId),
+                        iconTintColor = qrCodeTypeUi.iconTintColor,
+                        iconBackgroundColor = qrCodeTypeUi.iconBackgroundColor,
+                        onItemClick = {
+                            onItemClick(qrCodeTypeUi)
+                        }
+                    )
+                }
             }
-
         }
-
     }
-
 }
 
 
